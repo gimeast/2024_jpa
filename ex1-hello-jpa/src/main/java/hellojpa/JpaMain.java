@@ -2,8 +2,6 @@ package hellojpa;
 
 import jakarta.persistence.*;
 
-import java.util.List;
-
 public class JpaMain {
 
     public static void main(String[] args) {
@@ -49,14 +47,14 @@ public class JpaMain {
 
 
             //비영속 상태
-            Member member = new Member();
-            member.setId(1L);
-            member.setName("테스터이");
+//            Member member = new Member();
+//            member.setId(1L);
+//            member.setName("테스터이");
             //여기까지 비영속 상태
 
 //            System.out.println("BEFORE");
             //영속 상태
-            em.persist(member);
+//            em.persist(member);
 //            System.out.println("AFTER");
 
             //영속성 분리, 준영속 상태
@@ -88,6 +86,14 @@ public class JpaMain {
 
 //            System.out.println("findMember.name = " + findMember.getName());
 //            System.out.println("==========================");
+
+
+            Member member = new Member();
+            member.setId(2L);
+            member.setUsername("B");
+            member.setRoleType(RoleType.ADMIN);
+
+            em.persist(member);
 
             tx.commit();
 
