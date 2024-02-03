@@ -14,88 +14,26 @@ public class JpaMain {
         tx.begin();
 
         try {
-//            Member member = new Member();
-//            member.setId(2L);
-//            member.setName("TesterB");
+            Member member1 = new Member();
+            member1.setUsername("A");
+            Member member2 = new Member();
+            member2.setUsername("B");
+            Member member3 = new Member();
+            member3.setUsername("C");
 
-//            em.persist(member); //등록
+            System.out.println("111111111111111111");
 
+            em.persist(member1);
+            em.persist(member2);
+            em.persist(member3);
 
-//            Member member = em.find(Member.class, 1L);
-//            System.out.println("member.getId: " + member.getId());
-//            System.out.println("member.getId: " + member.getName());
+            System.out.println("member1.id = "+member1.getId());
+            System.out.println("member2.id = "+member2.getId());
+            System.out.println("member3.id = "+member3.getId());
 
-//            em.remove(member); //삭제
-
-
-//            Member member = em.find(Member.class, 2L);
-//            member.setName("HelloJPA"); //수정
-
-//            int pageNumber = 1;
-//            int pageSize = 10;
-
-//            List<Member> memberList = em.createQuery("select m from Member m", Member.class)
-//                    .setFirstResult((pageNumber-1) * pageSize)
-//                    .setMaxResults(pageSize)
-//                    .getResultList();
-
-//            System.out.println("=========================================");
-
-//            for (Member member : memberList) {
-//                System.out.println("member.name = " + member.getName());
-//            }
-
-
-            //비영속 상태
-//            Member member = new Member();
-//            member.setId(1L);
-//            member.setName("테스터이");
-            //여기까지 비영속 상태
-
-//            System.out.println("BEFORE");
-            //영속 상태
-//            em.persist(member);
-//            System.out.println("AFTER");
-
-            //영속성 분리, 준영속 상태
-//            em.detach(member);
-
-            //객체 조회
-//            Member findMember1 = em.find(Member.class, 104L);
-//            Member findMember2 = em.find(Member.class, 104L);
-            //객체를 삭제한 상태
-//            em.remove(findMember);
-
-//            System.out.println("findMember1.id = " + findMember1.getId());
-//            System.out.println("findMember1.name = " + findMember1.getName());
-//            System.out.println("==============================================");
-//            System.out.println("findMember2.id = " + findMember2.getId());
-//            System.out.println("findMember2.name = " + findMember2.getName());
-
-//            System.out.println("findMember1 == findMember2 : " + (findMember1 == findMember2)); //영속성 컨텍스트에 저장되어있는 있는것을 바라보므로 동일한 객체이다
-
-//            Member member1 = new Member(150L, "A");
-//            Member member2 = new Member(160L, "B");
-//            em.persist(member1);
-//            em.persist(member2);
-
-//            Member findMember = em.find(Member.class, 150L);
-//            findMember.setName("AAAA"); //update
-
-//            em.detach(findMember); //준영속 상태로 만들어서 update되지 않는다.
-
-//            System.out.println("findMember.name = " + findMember.getName());
-//            System.out.println("==========================");
-
-
-            Member member = new Member();
-            member.setId(2L);
-            member.setUsername("B");
-            member.setRoleType(RoleType.ADMIN);
-
-            em.persist(member);
-
+            System.out.println("222222222222222222");
             tx.commit();
+            System.out.println("333333333333333333");
 
             System.out.println("FINISH");
         } catch (Exception e) {
