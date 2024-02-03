@@ -49,14 +49,14 @@ public class JpaMain {
 
 
             //비영속 상태
-//            Member member = new Member();
-//            member.setId(104L);
-//            member.setName("HelloJPA");
+            Member member = new Member();
+            member.setId(1L);
+            member.setName("테스터이");
             //여기까지 비영속 상태
 
 //            System.out.println("BEFORE");
             //영속 상태
-//            em.persist(member);
+            em.persist(member);
 //            System.out.println("AFTER");
 
             //영속성 분리, 준영속 상태
@@ -81,13 +81,13 @@ public class JpaMain {
 //            em.persist(member1);
 //            em.persist(member2);
 
-            Member findMember = em.find(Member.class, 150L);
-            findMember.setName("AAAA"); //update
+//            Member findMember = em.find(Member.class, 150L);
+//            findMember.setName("AAAA"); //update
 
-            em.detach(findMember); //준영속 상태로 만들어서 update되지 않는다.
+//            em.detach(findMember); //준영속 상태로 만들어서 update되지 않는다.
 
-            System.out.println("findMember.name = " + findMember.getName());
-            System.out.println("==========================");
+//            System.out.println("findMember.name = " + findMember.getName());
+//            System.out.println("==========================");
 
             tx.commit();
 

@@ -1,5 +1,6 @@
 package hellojpa;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
@@ -8,7 +9,11 @@ public class Member {
 
     @Id
     private long id;
+
+    @Column(unique = true, length = 3)
     private String name;
+    private int age;
+    private int phone;
 
     public Member() {}
 
