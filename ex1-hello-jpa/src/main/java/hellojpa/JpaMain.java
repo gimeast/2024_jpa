@@ -82,7 +82,9 @@ public class JpaMain {
 //            em.persist(member2);
 
             Member findMember = em.find(Member.class, 150L);
-            findMember.setName("ZZZZZZZ"); //update
+            findMember.setName("AAAA"); //update
+
+            em.detach(findMember); //준영속 상태로 만들어서 update되지 않는다.
 
             System.out.println("findMember.name = " + findMember.getName());
             System.out.println("==========================");
