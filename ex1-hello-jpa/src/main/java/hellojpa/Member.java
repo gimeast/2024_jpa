@@ -26,7 +26,7 @@ public class Member {
 //    private Long teamId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "TEAM_ID")
+    @JoinColumn(name = "TEAM_ID") //연관관계의 주인이다.
     private Team team;
 
     public Team getTeam() {
