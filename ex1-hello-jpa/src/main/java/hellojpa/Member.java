@@ -36,6 +36,10 @@ public class Member {
     public void setTeam(Team team) {
         this.team = team;
     }
+    public void changeTeam(Team team) {
+        this.team = team;
+        team.getMembers().add(this); //양방향인 경우 편의상 이렇게 하는게 좋다.
+    }
 
     public Member() {
     }
@@ -56,11 +60,4 @@ public class Member {
         this.username = username;
     }
 
-//    public Long getTeamId() {
-//        return teamId;
-//    }
-//
-//    public void setTeamId(Long teamId) {
-//        this.teamId = teamId;
-//    }
 }

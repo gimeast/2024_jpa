@@ -18,7 +18,7 @@ public class Team {
     private Long id;
     private String name;
 
-    @OneToMany(mappedBy = "team") //변수명을 참조한다.
+    @OneToMany(mappedBy = "team") //주인의 변수명을 참조한다.
     private List<Member> members = new ArrayList<>();
 
     public Long getId() {

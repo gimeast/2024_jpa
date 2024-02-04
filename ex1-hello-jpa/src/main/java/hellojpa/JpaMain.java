@@ -23,18 +23,22 @@ public class JpaMain {
 
             Member member = new Member();
             member.setUsername("member1");
-            member.setTeam(team);
+            member.changeTeam(team); //**관례상 setTeam보다는 새로운 연관관계 편의 메소드를 생성하는게 좋다.
             em.persist(member);
 
-            em.flush();
-            em.clear();
+//            team.getMembers().add(member); //**양방향 연관관계인 경우 양쪽에 값을 셋팅 해주는게 맞다. (연관관계 편의 메소드를 이용하자.)
 
-            Member findMember = em.find(Member.class, member.getId());
+//            em.flush();
+//            em.clear();
 
-            List<Member> members = findMember.getTeam().getMembers();
+            Team findTeam = em.find(Team.class, team.getId()); //*em.flush()와 em.clear()를 주석하게 되면 1차캐시에 있는 값을 가지고온다.
+            List<Member> members = findTeam.getMembers(); //*1차 캐시에는 findTeam에 members가 비어있다.
+
+            System.out.println("==========================");
             for (Member m : members) {
-                System.out.println("team.member = " + m.getUsername());
+                System.out.println("m = " + m.getUsername());
             }
+            System.out.println("==========================");
 
             tx.commit();
 
