@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 
 import java.util.ArrayList;
@@ -18,7 +19,8 @@ public class Team {
     private Long id;
     private String name;
 
-    @OneToMany(mappedBy = "team") //주인의 변수명을 참조한다.
+    @OneToMany //주인의 변수명을 참조한다.
+    @JoinColumn(name = "TEAM_ID")
     private List<Member> members = new ArrayList<>();
 
     public Long getId() {

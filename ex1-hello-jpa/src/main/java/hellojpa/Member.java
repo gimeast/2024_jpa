@@ -25,21 +25,21 @@ public class Member {
 //    @Column(name = "TEAM_ID")
 //    private Long teamId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "TEAM_ID") //연관관계의 주인이다.
+    @ManyToOne
+    @JoinColumn(name = "TEAM_ID",insertable = false, updatable = false) //1 대 N 양방향 => 억지로 만든것.
     private Team team;
 
-    public Team getTeam() {
-        return team;
-    }
+//    public Team getTeam() {
+//        return team;
+//    }
 
-    public void setTeam(Team team) {
-        this.team = team;
-    }
-    public void changeTeam(Team team) {
-        this.team = team;
-        team.getMembers().add(this); //양방향인 경우 편의상 이렇게 하는게 좋다.
-    }
+//    public void setTeam(Team team) {
+//        this.team = team;
+//    }
+//    public void changeTeam(Team team) {
+//        this.team = team;
+//        team.getMembers().add(this); //양방향인 경우 편의상 이렇게 하는게 좋다.
+//    }
 
     public Member() {
     }
