@@ -19,6 +19,12 @@ public class JpaMain {
 
             Member member = new Member();
             member.setUsername("member1");
+
+            Locker locker = new Locker();
+            locker.setName("my Locker");
+            em.persist(locker);
+
+            member.setLocker(locker);
             em.persist(member);
 
             Team team = new Team();
@@ -26,6 +32,14 @@ public class JpaMain {
             team.getMembers().add(member);
 
             em.persist(team);
+
+            em.flush();
+            em.clear();
+
+            Locker findLocker = em.find(Locker.class, locker.getId());
+            System.out.println("=============================");
+            System.out.println(findLocker.getMember().getUsername());
+            System.out.println("=============================");
 
             tx.commit();
 
