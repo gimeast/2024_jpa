@@ -16,30 +16,20 @@ public class JpaMain {
         tx.begin();
 
         try {
+            Movie movie = new Movie();
 
-            Member member = new Member();
-            member.setUsername("member1");
+            movie.setDirector("A");
+            movie.setActor("B");
+            movie.setName("바람과 함께 사라지다");
+            movie.setPrice(10000);
 
-            Locker locker = new Locker();
-            locker.setName("my Locker");
-            em.persist(locker);
-
-            member.setLocker(locker);
-            em.persist(member);
-
-            Team team = new Team();
-            team.setName("teamA");
-            team.getMembers().add(member);
-
-            em.persist(team);
+            em.persist(movie);
 
             em.flush();
-            em.clear();
+            em.clear();;
 
-            Locker findLocker = em.find(Locker.class, locker.getId());
-            System.out.println("=============================");
-            System.out.println(findLocker.getMember().getUsername());
-            System.out.println("=============================");
+            Movie findMovie = em.find(Movie.class, movie.getId());
+            System.out.println(findMovie);
 
             tx.commit();
 
