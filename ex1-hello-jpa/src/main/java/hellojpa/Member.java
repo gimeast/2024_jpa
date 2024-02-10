@@ -2,15 +2,16 @@ package hellojpa;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.TableGenerator;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Member {
@@ -34,18 +35,8 @@ public class Member {
     @JoinColumn(name = "LOCKER_ID")
     private Locker locker;
 
-//    public Team getTeam() {
-//        return team;
-//    }
-
-//    public void setTeam(Team team) {
-//        this.team = team;
-//    }
-//    public void changeTeam(Team team) {
-//        this.team = team;
-//        team.getMembers().add(this); //양방향인 경우 편의상 이렇게 하는게 좋다.
-//    }
-
+    @OneToMany(mappedBy = "member")
+    private List<MemberProduct> memberProducts = new ArrayList<>();
     public Member() {
     }
 
