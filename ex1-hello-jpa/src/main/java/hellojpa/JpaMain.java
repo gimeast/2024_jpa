@@ -18,42 +18,34 @@ public class JpaMain {
         tx.begin();
 
         try {
+            Team team = new Team();
+            team.setName("teamA");
+            em.persist(team);
+
+            Team teamB = new Team();
+            team.setName("teamB");
+            em.persist(teamB);
+
             Member member1 = new Member();
             member1.setUsername("사용자1");
+            member1.setTeam(team);
             em.persist(member1);
-
+            
             Member member2 = new Member();
             member2.setUsername("사용자2");
+            member2.setTeam(teamB);
             em.persist(member2);
 
-
             em.flush();
             em.clear();
 
-            Member m1 = em.find(Member.class, member1.getId());
-//            Member m2 = em.find(Member.class, member1.getId());
-
-//            System.out.println(m1 == m2); //true
-//            System.out.println(m1.getClass() == m2.getClass()); //true
-
-            Member m2ref = em.getReference(Member.class, member2.getId());
-            System.out.println(m1.getClass() == m2ref.getClass()); //false
-
-            System.out.println(m1 instanceof Member); //true
-            System.out.println(m2ref instanceof Member); //true
-
-            Member m1ref = em.getReference(Member.class, member1.getId());
-            System.out.println(m1ref.getClass());
-            System.out.println(m2ref.getClass());
-
-            em.flush();
-            em.clear();
-
-            Member refMember = em.getReference(Member.class, member1.getId());
-            System.out.println(refMember.getClass());
-//            refMember.getUsername();
-            Hibernate.initialize(refMember); //강제초기화
-            System.out.println("isLodaded = " + emf.getPersistenceUnitUtil().isLoaded(refMember));
+            //fetch가 EAGER인 경우 N+1 문제를 일으킨다.
+            System.out.println("============================================");
+            List<Member> members = em.createQuery("select m from Member m join fetch m.team", Member.class).getResultList();
+            members.stream().forEach(member -> System.out.println(member.getUsername()));
+            System.out.println("============================================");
+            //SQL: select * from member
+            //SQL: select * from team where team_id = xxx
 
             tx.commit();
 
