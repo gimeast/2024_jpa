@@ -21,12 +21,24 @@ public class JpaMain {
             Parent parent = new Parent();
 
             Child child1 = new Child();
+            child1.setName("A");
             parent.addChild(child1);
 
             Child child2 = new Child();
+            child2.setName("B");
             parent.addChild(child2);
 
             em.persist(parent);
+            em.persist(child1);
+            em.persist(child2);
+
+            em.flush();
+            em.clear();
+
+            Parent findParent = em.find(Parent.class, parent.getId());
+//            findParent.getChildList().remove(0);
+
+            em.remove(findParent);
 
             tx.commit();
 
