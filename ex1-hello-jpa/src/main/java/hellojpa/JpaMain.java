@@ -18,34 +18,15 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Team team = new Team();
-            team.setName("teamA");
-            em.persist(team);
+            Parent parent = new Parent();
 
-            Team teamB = new Team();
-            team.setName("teamB");
-            em.persist(teamB);
+            Child child1 = new Child();
+            parent.addChild(child1);
 
-            Member member1 = new Member();
-            member1.setUsername("사용자1");
-            member1.setTeam(team);
-            em.persist(member1);
-            
-            Member member2 = new Member();
-            member2.setUsername("사용자2");
-            member2.setTeam(teamB);
-            em.persist(member2);
+            Child child2 = new Child();
+            parent.addChild(child2);
 
-            em.flush();
-            em.clear();
-
-            //fetch가 EAGER인 경우 N+1 문제를 일으킨다.
-            System.out.println("============================================");
-            List<Member> members = em.createQuery("select m from Member m join fetch m.team", Member.class).getResultList();
-            members.stream().forEach(member -> System.out.println(member.getUsername()));
-            System.out.println("============================================");
-            //SQL: select * from member
-            //SQL: select * from team where team_id = xxx
+            em.persist(parent);
 
             tx.commit();
 
