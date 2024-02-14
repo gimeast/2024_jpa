@@ -14,32 +14,44 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Address address = new Address("city", "street", "zipcode");
 
             Member member = new Member();
             member.setUsername("member1");
-            member.setHomeAddress(address);
+            member.setHomeAddress(new Address("homeCity", "street", "10000"));
+
+            member.getFavoriteFoods().add("치킨");
+            member.getFavoriteFoods().add("족발");
+            member.getFavoriteFoods().add("피자");
+
+            member.getAddressHistory().add(new AddressEntity("old1", "street", "10000"));
+            member.getAddressHistory().add(new AddressEntity("old2", "street", "10000"));
+
             em.persist(member);
 
-            //값 타입의 실제 인스턴스인 값을 공유하는 것은 위험.
-            //대신 값을 복사해서 사용.
-            //객체 타입은 수정할 수 없게 만들어서 사이드 이펙트를 원천 차단해야한다.
-            Address copyAddress = new Address(address.getCity(), address.getStreet(), address.getStreet());
+            em.flush();
+            em.clear();
 
-            Member member2 = new Member();
-            member2.setUsername("member2");
-            member2.setHomeAddress(copyAddress);
-            em.persist(member2);
+            Member findMember = em.find(Member.class, member.getId());
 
-//            member.getHomeAddress().setCity("newCity");
+            Address homeAddress = findMember.getHomeAddress();
+            findMember.setHomeAddress(new Address("newCity", homeAddress.getStreet(), homeAddress.getZipcode()));
 
-            //setter를 없애고 난 상태에서 수정하고 싶다면 새로 생성해서 넣어줘야한다! 사이드 이펙트를 방지할 수 있다.
-            Address newAddress = new Address("newCity", "street", "zipcode");
+            findMember.getFavoriteFoods().remove("치킨");
+            findMember.getFavoriteFoods().add("한식");
 
-            Member member3 = new Member();
-            member3.setUsername("member3");
-            member3.setHomeAddress(newAddress);
-            em.persist(member3);
+            //remove시 equals와 hash로 비교하여
+            findMember.getAddressHistory().remove(new AddressEntity("old1", "street", "10000"));
+            findMember.getAddressHistory().add(new AddressEntity("newCity1", "street", "10000"));
+
+
+            System.out.println("=============ADDRESS=============>");
+            findMember.getAddressHistory().forEach(
+                val -> System.out.println(val.getAddress().getCity() + ", " + val.getAddress().getStreet() + ", " + val.getAddress().getZipcode())
+            );
+
+            System.out.println("=============FOODS===============>");
+
+            findMember.getFavoriteFoods().forEach(System.out::println);
 
             tx.commit();
 
