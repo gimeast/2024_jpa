@@ -18,11 +18,23 @@ public class JpaMain {
         tx.begin();
 
         try {
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < 28; i++) {
+//                Team team = new Team();
+//                team.setName("team"+i);
+//                em.persist(team);
+
                 Member member = new Member();
                 member.setName("member"+i);
                 member.setAge(i);
+//                member.setTeam(team);
                 em.persist(member);
+
+                Team team = new Team();
+                team.setName("teamA");
+
+                member.changeTeam(team);
+
+                em.persist(team);
             }
 
 //            TypedQuery<Member> query1 = em.createQuery("select m from Member m", Member.class);//반환 타입이 명확 할 때는 TypeQuery
@@ -76,15 +88,23 @@ public class JpaMain {
 //            System.out.println("memberDTO.getName() = " + memberDTO.getName());
 //            System.out.println("memberDTO.getAge() = " + memberDTO.getAge());
 
-            List<Member> result = em.createQuery("select m from Member m order by m.age desc", Member.class)
-                    .setFirstResult(0)
-                    .setMaxResults(10)
+//            List<Member> result = em.createQuery("select m from Member m order by m.age desc", Member.class)
+//                    .setFirstResult(0)
+//                    .setMaxResults(10)
+//                    .getResultList();
+
+//            for (Member member1 : result) {
+//                System.out.println("member1 = " + member1);
+//            }
+
+            String query1 = "select m from Member m inner join m.team t";
+            String query2 = "select m from Member m, Team t where m.name = t.name"; //세타조인 : 카티션곱 발생.
+            String query3 = "select m from Member m left join m.team t on t.name = 'teamA'";
+            String query4 = "select m from Member m left join Team t on m.name = t.name"; //연관관계 없는 엔티티 외부 조인
+            List<Member> result = em.createQuery(query4, Member.class)
                     .getResultList();
 
-            for (Member member1 : result) {
-                System.out.println("member1 = " + member1);
-            }
-
+            System.out.println("result = " + result);
 
             tx.commit();
 
