@@ -3,6 +3,7 @@ package jpql;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.OrderColumn;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
@@ -29,13 +30,18 @@ public class JpaMain {
 //                member.setMemberType(MemberType.ADMIN);
 //                member.setTeam(team);
                 em.persist(member);
+                Member member2 = new Member();
+                member2.setName("memberB");
+                member2.setAge(30);
+                member2.setMemberType(MemberType.ADMIN);
+                em.persist(member2);
 
-                Team team = new Team();
-                team.setName("teamA");
+//                Team team = new Team();
+//                team.setName("teamA");
 
-                member.changeTeam(team);
+//                member.changeTeam(team);
 
-                em.persist(team);
+//                em.persist(team);
 
 //            TypedQuery<Member> query1 = em.createQuery("select m from Member m", Member.class);//반환 타입이 명확 할 때는 TypeQuery
 //            Query query2 = em.createQuery("select m.id, m.name from Member m"); //반환 타입이 명확 하지 않을 때는 Query
@@ -111,12 +117,24 @@ public class JpaMain {
 //                            " end " +
 //                            " from Member m ";
 //            String query = "select coalesce(m.name, '이름 없는 회원') from Member m"; //member name이 null이면 '이름 없는 회원' 반환
-            String query = "select nullif(m.name, 'memberA') from Member m"; //member name이 memberA면 null을 반환
-            List<Member> result = em.createQuery(query, Member.class)
+//            String query = "select nullif(m.name, 'memberA') from Member m"; //member name이 memberA면 null을 반환
+//            String query = "select concat('a','b') from Member m";
+//            String query = "select length(substring(m.name, 2,3)) from Member m";
+//            String query = "select locate('de', 'abcdefg') from Member m ";
+//            String query = "select size(t.members) from Team t";
+            String query = "select function('group_concat', m.name) from Member m";
+//            List<Integer> result = em.createQuery(query, Integer.class)
+            List<String> result = em.createQuery(query, String.class)
+//            List<Member> result = em.createQuery(query, Member.class)
 //                    .setParameter("memberType", MemberType.ADMIN)
                     .getResultList();
 
+            System.out.println("====================================");
             System.out.println("result = " + result);
+            for (String s : result) {
+                System.out.println("s = " + s);
+            }
+            System.out.println("====================================");
 
             tx.commit();
 
