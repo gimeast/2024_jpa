@@ -101,7 +101,9 @@ public class JpaMain {
             String query2 = "select m from Member m, Team t where m.name = t.name"; //세타조인 : 카티션곱 발생.
             String query3 = "select m from Member m left join m.team t on t.name = 'teamA'";
             String query4 = "select m from Member m left join Team t on m.name = t.name"; //연관관계 없는 엔티티 외부 조인
-            List<Member> result = em.createQuery(query4, Member.class)
+
+            String query = "select (select avg(m1.age) from Member m1) as avgAge from Member m inner join m.team t"; //select 절 서브쿼리 예제
+            List<Member> result = em.createQuery(query, Member.class)
                     .getResultList();
 
             System.out.println("result = " + result);
