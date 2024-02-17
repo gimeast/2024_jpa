@@ -24,7 +24,7 @@ public class JpaMain {
 
                 Member member = new Member();
                 member.setName("memberA");
-                member.setAge(10);
+                member.setAge(20);
                 member.setMemberType(MemberType.USER);
 //                member.setMemberType(MemberType.ADMIN);
 //                member.setTeam(team);
@@ -103,9 +103,17 @@ public class JpaMain {
             String query4 = "select m from Member m left join Team t on m.name = t.name"; //연관관계 없는 엔티티 외부 조인
 
 //            String query = "select (select avg(m1.age) from Member m1) as avgAge from Member m inner join m.team t"; //select 절 서브쿼리 예제
-            String query = "select m from Member m where m.memberType = :memberType";
+//            String query = "select m from Member m where m.memberType = :memberType";
+//            String query = " select " +
+//                            " case when m.age <= 10 then '학생요금' " +
+//                                " when m.age >= 60 then '경로요금' " +
+//                                " else '일반요금' " +
+//                            " end " +
+//                            " from Member m ";
+//            String query = "select coalesce(m.name, '이름 없는 회원') from Member m"; //member name이 null이면 '이름 없는 회원' 반환
+            String query = "select nullif(m.name, 'memberA') from Member m"; //member name이 memberA면 null을 반환
             List<Member> result = em.createQuery(query, Member.class)
-                    .setParameter("memberType", MemberType.ADMIN)
+//                    .setParameter("memberType", MemberType.ADMIN)
                     .getResultList();
 
             System.out.println("result = " + result);
