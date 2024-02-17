@@ -18,11 +18,12 @@ public class JpaMain {
         tx.begin();
 
         try {
-
-            Member member = new Member();
-            member.setName("member1");
-            member.setAge(10);
-            em.persist(member);
+            for (int i = 0; i < 100; i++) {
+                Member member = new Member();
+                member.setName("member"+i);
+                member.setAge(i);
+                em.persist(member);
+            }
 
 //            TypedQuery<Member> query1 = em.createQuery("select m from Member m", Member.class);//반환 타입이 명확 할 때는 TypeQuery
 //            Query query2 = em.createQuery("select m.id, m.name from Member m"); //반환 타입이 명확 하지 않을 때는 Query
@@ -69,11 +70,21 @@ public class JpaMain {
 //            System.out.println("resultList.get(0)[0] = " + resultList.get(0)[0]);
 //            System.out.println("resultList.get(0)[0] = " + resultList.get(0)[0]);
 
-            List<MemberDTO> result = em.createQuery("select new jpql.MemberDTO(m.name, m.age) from Member m", MemberDTO.class).getResultList();
-            MemberDTO memberDTO = result.get(0);
+//            List<MemberDTO> result = em.createQuery("select new jpql.MemberDTO(m.name, m.age) from Member m", MemberDTO.class).getResultList();
+//            MemberDTO memberDTO = result.get(0);
 
-            System.out.println("memberDTO.getName() = " + memberDTO.getName());
-            System.out.println("memberDTO.getAge() = " + memberDTO.getAge());
+//            System.out.println("memberDTO.getName() = " + memberDTO.getName());
+//            System.out.println("memberDTO.getAge() = " + memberDTO.getAge());
+
+            List<Member> result = em.createQuery("select m from Member m order by m.age desc", Member.class)
+                    .setFirstResult(0)
+                    .setMaxResults(10)
+                    .getResultList();
+
+            for (Member member1 : result) {
+                System.out.println("member1 = " + member1);
+            }
+
 
             tx.commit();
 
