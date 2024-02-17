@@ -18,14 +18,15 @@ public class JpaMain {
         tx.begin();
 
         try {
-            for (int i = 0; i < 28; i++) {
 //                Team team = new Team();
 //                team.setName("team"+i);
 //                em.persist(team);
 
                 Member member = new Member();
-                member.setName("member"+i);
-                member.setAge(i);
+                member.setName("memberA");
+                member.setAge(10);
+                member.setMemberType(MemberType.USER);
+//                member.setMemberType(MemberType.ADMIN);
 //                member.setTeam(team);
                 em.persist(member);
 
@@ -35,7 +36,6 @@ public class JpaMain {
                 member.changeTeam(team);
 
                 em.persist(team);
-            }
 
 //            TypedQuery<Member> query1 = em.createQuery("select m from Member m", Member.class);//반환 타입이 명확 할 때는 TypeQuery
 //            Query query2 = em.createQuery("select m.id, m.name from Member m"); //반환 타입이 명확 하지 않을 때는 Query
@@ -102,8 +102,10 @@ public class JpaMain {
             String query3 = "select m from Member m left join m.team t on t.name = 'teamA'";
             String query4 = "select m from Member m left join Team t on m.name = t.name"; //연관관계 없는 엔티티 외부 조인
 
-            String query = "select (select avg(m1.age) from Member m1) as avgAge from Member m inner join m.team t"; //select 절 서브쿼리 예제
+//            String query = "select (select avg(m1.age) from Member m1) as avgAge from Member m inner join m.team t"; //select 절 서브쿼리 예제
+            String query = "select m from Member m where m.memberType = :memberType";
             List<Member> result = em.createQuery(query, Member.class)
+                    .setParameter("memberType", MemberType.ADMIN)
                     .getResultList();
 
             System.out.println("result = " + result);
