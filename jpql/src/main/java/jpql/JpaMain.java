@@ -65,8 +65,24 @@ public class JpaMain {
 //            TypedQuery<Member> query1 = em.createQuery("select m from Member m", Member.class);//반환 타입이 명확 할 때는 TypeQuery
 //            Query query2 = em.createQuery("select m.id, m.name from Member m"); //반환 타입이 명확 하지 않을 때는 Query
 
-            em.flush();
+//            em.flush();
+//            em.clear();
+
+            //FLUSH 자동 호출
+            int resultCount = em.createQuery("update Member m set m.age = 20")
+                    .executeUpdate(); //벌크연산
+
+            //벌크 연산 수행 후 영속성 컨텍스트를 초기화한다
             em.clear();
+
+            System.out.println("resultCount = " + resultCount);
+
+            Member findMember1 = em.find(Member.class, member1.getId());
+            Member findMember2 = em.find(Member.class, member2.getId());
+            Member findMember3 = em.find(Member.class, member3.getId());
+            System.out.println("findMember1 = " + findMember1);
+            System.out.println("findMember2 = " + findMember2);
+            System.out.println("findMember3 = " + findMember3);
 
 //            TypedQuery<Member> query = em.createQuery("select m from Member m", Member.class);
 //            List<Member> resultList = query.getResultList();
@@ -163,16 +179,17 @@ public class JpaMain {
 //            String query2 = "select m from Member m join fetch m.team"; //다대일은 페이징 가능! (Best)
 //            String query3 = "select t from Team t"; //페이징 성능 안좋음, batchsize를 적용하면
 
+            String query = "select m from Member m";
 //            String query = "select m from Member m where m = :member";
 //            String query = "select m from Member m where m.team = :team";
 
 //            Integer result = em.createQuery(query, Integer.class)
 //            List<Integer> result = em.createQuery(query, Integer.class)
 //            List<String> result = em.createQuery(query, String.class)
-//            List<Member> result = em.createQuery(query, Member.class)
-            List<Member> result = em.createNamedQuery("Member.findByName", Member.class)
+            List<Member> result = em.createQuery(query, Member.class)
+//            List<Member> result = em.createNamedQuery("Member.findByName", Member.class)
 //            List<Team> result = em.createQuery(query, Team.class)
-                    .setParameter("name", "memberA")
+//                    .setParameter("name", "memberA")
 //                    .setParameter("team", team)
 //                    .setParameter("member", member1)
 //                    .setParameter("memberType", MemberType.ADMIN)
