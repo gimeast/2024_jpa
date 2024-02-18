@@ -122,10 +122,10 @@ public class JpaMain {
 //                System.out.println("member1 = " + member1);
 //            }
 
-            String query1 = "select m from Member m inner join m.team t";
-            String query2 = "select m from Member m, Team t where m.name = t.name"; //세타조인 : 카티션곱 발생.
-            String query3 = "select m from Member m left join m.team t on t.name = 'teamA'";
-            String query4 = "select m from Member m left join Team t on m.name = t.name"; //연관관계 없는 엔티티 외부 조인
+//            String query1 = "select m from Member m inner join m.team t";
+//            String query2 = "select m from Member m, Team t where m.name = t.name"; //세타조인 : 카티션곱 발생.
+//            String query3 = "select m from Member m left join m.team t on t.name = 'teamA'";
+//            String query4 = "select m from Member m left join Team t on m.name = t.name"; //연관관계 없는 엔티티 외부 조인
 
 //            String query = "select (select avg(m1.age) from Member m1) as avgAge from Member m inner join m.team t"; //select 절 서브쿼리 예제
 //            String query = "select m from Member m where m.memberType = :memberType";
@@ -148,23 +148,44 @@ public class JpaMain {
 //            String query = "select m.team from Member m"; //단일 값 연관 경로: 묵시적 내부 조인 발생, 탐색O
 //            String query = "select t.members.name from Team t"; //이러한 JPQL은 불가능하다. 아래와 같은 명시적 조인을 쓰자!
 //            String query = "select m.name from Team t join t.members m";
-            String query = "select m from Member m left join fetch m.team";
+//            String query = "select m from Member m join fetch m.team";
+
+            /*
+            애플리케이션에서 fetch join의 결과는 연관된 모든 엔티티가 있을것이라 가정하고 사용해야 합니다.
+            이렇게 페치 조인에 별칭을 잘못 사용해서 컬렉션 결과를 필터링 해버리면, 객체의 상태와 DB의 상태 일관성이 깨지는 것이다.
+            결론: fetch join의 대상은 on, where 등에서 필터링 조건으로 사용하면 안된다.
+            그리고 fetch join의 대상이 아닌 엔티티는 where 문을 사용해도 된다.
+            둘 이상의 컬렉션은 페치 조인 할 수 없다.
+            *******또한 JPA의 설계 사상 자체가 객체 그래프를 탐색한다는 것은 Team.members가 모두 조회된다는것을 가정하고 설계 되어있다.*******
+            만약 cascade 같은 것들이 적용되어있다면 나머지 데이터가 지워지는 현상이 발생할 수 있고 이상하게 동작 할 수 있다!!
+             */
+            String query1 = "select t from Team t join fetch t.members"; //일대다는 페이징 불가능!
+            String query2 = "select m from Member m join fetch m.team"; //다대일은 페이징 가능! (Best)
+            String query3 = "select t from Team t"; //페이징 성능 안좋음, batchsize를 적용하면
 
 //            Integer result = em.createQuery(query, Integer.class)
 //            List<Integer> result = em.createQuery(query, Integer.class)
 //            List<String> result = em.createQuery(query, String.class)
-            List<Member> result = em.createQuery(query, Member.class)
+//            List<Member> result = em.createQuery(query2, Member.class)
+            List<Team> result = em.createQuery(query3, Team.class)
 //                    .setParameter("memberType", MemberType.ADMIN)
 //                    .getResultList();
+                    .setFirstResult(0)
+                    .setMaxResults(1)
                     .getResultList();
 
             System.out.println("====================================");
-            for (Member member : result) {
-                if (member.getTeam() == null) {
-                    System.out.println("member = " + member.getName() + " : " + member.getTeam());
-                } else {
-                    System.out.println("member = " + member.getName() + " : " + member.getTeam().getName());
+//            for (Member m : result) {
+//                System.out.println("m = " + m);
+
+            for (Team t : result) {
+                System.out.println("team = " + t.getName() + "|" + t.getMembers().size());
+                for (Member m : t.getMembers()) {
+                    System.out.println("-->member = " + m);
                 }
+            
+//                System.out.println("member = " + member.getName() + " : " + member.getTeam());
+//                System.out.println("member = " + member.getName() + " : " + member.getTeam().getName());
             }
             //            for (String s : result) {
 //            for (Member s : result) {
