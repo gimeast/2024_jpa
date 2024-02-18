@@ -19,21 +19,23 @@ public class JpaMain {
         tx.begin();
 
         try {
-//                Team team = new Team();
-//                team.setName("team"+i);
-//                em.persist(team);
+                Team team = new Team();
+                team.setName("teamA");
+                em.persist(team);
 
-                Member member = new Member();
-                member.setName("memberA");
-                member.setAge(20);
-                member.setMemberType(MemberType.USER);
+                Member member1 = new Member();
+                member1.setName("memberA");
+                member1.setAge(20);
+                member1.setMemberType(MemberType.USER);
 //                member.setMemberType(MemberType.ADMIN);
-//                member.setTeam(team);
-                em.persist(member);
+                member1.setTeam(team);
+                em.persist(member1);
+
                 Member member2 = new Member();
                 member2.setName("memberB");
                 member2.setAge(30);
                 member2.setMemberType(MemberType.ADMIN);
+                member2.setTeam(team);
                 em.persist(member2);
 
 //                Team team = new Team();
@@ -122,18 +124,28 @@ public class JpaMain {
 //            String query = "select length(substring(m.name, 2,3)) from Member m";
 //            String query = "select locate('de', 'abcdefg') from Member m ";
 //            String query = "select size(t.members) from Team t";
-            String query = "select function('group_concat', m.name) from Member m";
+//            String query = "select function('group_concat', m.name) from Member m";
+
+            //경로 표현식 특징
+//            String query = "select m.name from Member m"; //상태필드: 경로 탐색의 끝, 탐색X
+//            String query = "select m.team from Member m"; //단일 값 연관 경로: 묵시적 내부 조인 발생, 탐색O
+//            String query = "select t.members.name from Team t"; //이러한 JPQL은 불가능하다. 아래와 같은 명시적 조인을 쓰자!
+            String query = "select m.name from Team t join t.members m";
+
+//            Integer result = em.createQuery(query, Integer.class)
 //            List<Integer> result = em.createQuery(query, Integer.class)
-            List<String> result = em.createQuery(query, String.class)
-//            List<Member> result = em.createQuery(query, Member.class)
+//            List<String> result = em.createQuery(query, String.class)
+            List<Member> result = em.createQuery(query, Member.class)
 //                    .setParameter("memberType", MemberType.ADMIN)
+//                    .getResultList();
                     .getResultList();
 
             System.out.println("====================================");
             System.out.println("result = " + result);
-            for (String s : result) {
-                System.out.println("s = " + s);
-            }
+//            for (String s : result) {
+//            for (Member s : result) {
+//                System.out.println("s = " + s);
+//            }
             System.out.println("====================================");
 
             tx.commit();
