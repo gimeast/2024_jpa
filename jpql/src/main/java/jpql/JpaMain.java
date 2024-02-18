@@ -23,6 +23,10 @@ public class JpaMain {
                 team.setName("teamA");
                 em.persist(team);
 
+                Team teamB = new Team();
+                teamB.setName("teamB");
+                em.persist(teamB);
+
                 Member member1 = new Member();
                 member1.setName("memberA");
                 member1.setAge(20);
@@ -37,6 +41,19 @@ public class JpaMain {
                 member2.setMemberType(MemberType.ADMIN);
                 member2.setTeam(team);
                 em.persist(member2);
+
+                Member member3 = new Member();
+                member3.setName("memberC");
+                member3.setAge(40);
+                member3.setMemberType(MemberType.ADMIN);
+                member3.setTeam(teamB);
+                em.persist(member3);
+
+                Member member4 = new Member();
+                member4.setName("memberD");
+                member4.setAge(40);
+                member4.setMemberType(MemberType.ADMIN);
+                em.persist(member4);
 
 //                Team team = new Team();
 //                team.setName("teamA");
@@ -130,7 +147,8 @@ public class JpaMain {
 //            String query = "select m.name from Member m"; //상태필드: 경로 탐색의 끝, 탐색X
 //            String query = "select m.team from Member m"; //단일 값 연관 경로: 묵시적 내부 조인 발생, 탐색O
 //            String query = "select t.members.name from Team t"; //이러한 JPQL은 불가능하다. 아래와 같은 명시적 조인을 쓰자!
-            String query = "select m.name from Team t join t.members m";
+//            String query = "select m.name from Team t join t.members m";
+            String query = "select m from Member m left join fetch m.team";
 
 //            Integer result = em.createQuery(query, Integer.class)
 //            List<Integer> result = em.createQuery(query, Integer.class)
@@ -141,8 +159,14 @@ public class JpaMain {
                     .getResultList();
 
             System.out.println("====================================");
-            System.out.println("result = " + result);
-//            for (String s : result) {
+            for (Member member : result) {
+                if (member.getTeam() == null) {
+                    System.out.println("member = " + member.getName() + " : " + member.getTeam());
+                } else {
+                    System.out.println("member = " + member.getName() + " : " + member.getTeam().getName());
+                }
+            }
+            //            for (String s : result) {
 //            for (Member s : result) {
 //                System.out.println("s = " + s);
 //            }
