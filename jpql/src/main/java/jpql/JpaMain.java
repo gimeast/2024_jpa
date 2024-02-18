@@ -164,14 +164,16 @@ public class JpaMain {
 //            String query3 = "select t from Team t"; //페이징 성능 안좋음, batchsize를 적용하면
 
 //            String query = "select m from Member m where m = :member";
-            String query = "select m from Member m where m.team = :team";
+//            String query = "select m from Member m where m.team = :team";
 
 //            Integer result = em.createQuery(query, Integer.class)
 //            List<Integer> result = em.createQuery(query, Integer.class)
 //            List<String> result = em.createQuery(query, String.class)
-            List<Member> result = em.createQuery(query, Member.class)
+//            List<Member> result = em.createQuery(query, Member.class)
+            List<Member> result = em.createNamedQuery("Member.findByName", Member.class)
 //            List<Team> result = em.createQuery(query, Team.class)
-                    .setParameter("team", team)
+                    .setParameter("name", "memberA")
+//                    .setParameter("team", team)
 //                    .setParameter("member", member1)
 //                    .setParameter("memberType", MemberType.ADMIN)
 //                    .getResultList();
