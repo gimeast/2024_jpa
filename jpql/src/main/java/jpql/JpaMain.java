@@ -159,34 +159,42 @@ public class JpaMain {
             *******또한 JPA의 설계 사상 자체가 객체 그래프를 탐색한다는 것은 Team.members가 모두 조회된다는것을 가정하고 설계 되어있다.*******
             만약 cascade 같은 것들이 적용되어있다면 나머지 데이터가 지워지는 현상이 발생할 수 있고 이상하게 동작 할 수 있다!!
              */
-            String query1 = "select t from Team t join fetch t.members"; //일대다는 페이징 불가능!
-            String query2 = "select m from Member m join fetch m.team"; //다대일은 페이징 가능! (Best)
-            String query3 = "select t from Team t"; //페이징 성능 안좋음, batchsize를 적용하면
+//            String query1 = "select t from Team t join fetch t.members"; //일대다는 페이징 불가능!
+//            String query2 = "select m from Member m join fetch m.team"; //다대일은 페이징 가능! (Best)
+//            String query3 = "select t from Team t"; //페이징 성능 안좋음, batchsize를 적용하면
+
+//            String query = "select m from Member m where m = :member";
+            String query = "select m from Member m where m.team = :team";
 
 //            Integer result = em.createQuery(query, Integer.class)
 //            List<Integer> result = em.createQuery(query, Integer.class)
 //            List<String> result = em.createQuery(query, String.class)
-//            List<Member> result = em.createQuery(query2, Member.class)
-            List<Team> result = em.createQuery(query3, Team.class)
+            List<Member> result = em.createQuery(query, Member.class)
+//            List<Team> result = em.createQuery(query, Team.class)
+                    .setParameter("team", team)
+//                    .setParameter("member", member1)
 //                    .setParameter("memberType", MemberType.ADMIN)
 //                    .getResultList();
-                    .setFirstResult(0)
-                    .setMaxResults(1)
+//                    .setFirstResult(0)
+//                    .setMaxResults(1)
                     .getResultList();
 
             System.out.println("====================================");
+            for (Member m : result) {
+                System.out.println("m = " + m);
+            }
 //            for (Member m : result) {
 //                System.out.println("m = " + m);
 
-            for (Team t : result) {
-                System.out.println("team = " + t.getName() + "|" + t.getMembers().size());
-                for (Member m : t.getMembers()) {
-                    System.out.println("-->member = " + m);
-                }
+//            for (Team t : result) {
+//                System.out.println("team = " + t.getName() + "|" + t.getMembers().size());
+//                for (Member m : t.getMembers()) {
+//                    System.out.println("-->member = " + m);
+//                }
             
 //                System.out.println("member = " + member.getName() + " : " + member.getTeam());
 //                System.out.println("member = " + member.getName() + " : " + member.getTeam().getName());
-            }
+//            }
             //            for (String s : result) {
 //            for (Member s : result) {
 //                System.out.println("s = " + s);
