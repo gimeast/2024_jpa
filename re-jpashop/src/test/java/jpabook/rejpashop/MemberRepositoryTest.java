@@ -23,7 +23,7 @@ public class MemberRepositoryTest {
     void save() {
         //given
         Member member = new Member();
-        member.setUsername("홍길동");
+        member.setName("홍길동");
 
         //when
         Long id = memberRepository.save(member);
@@ -31,7 +31,7 @@ public class MemberRepositoryTest {
 
         //then
         assertThat(findMember.getId()).isEqualTo(member.getId());
-        assertThat(findMember.getUsername()).isEqualTo(member.getUsername());
+        assertThat(findMember.getName()).isEqualTo(member.getName());
 
         //true => equals와 hashcode를 생성하지 않는다면 같은 영속성 컨텍스트 안에서 같은 식별자값이 같으면 1차 캐시에 있는 엔티티를 바라보게되어 true가 나온다.
         assertThat(findMember).isEqualTo(member);
@@ -39,5 +39,6 @@ public class MemberRepositoryTest {
         System.out.println("findMember: " + findMember + ", member: " + member);
         System.out.println("===================================================");
     }
+
 
 }
