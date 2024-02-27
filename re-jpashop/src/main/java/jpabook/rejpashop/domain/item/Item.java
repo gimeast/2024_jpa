@@ -9,6 +9,7 @@ import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.ManyToMany;
 import jpabook.rejpashop.domain.Category;
+import jpabook.rejpashop.exception.NotEnoughStockException;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -33,5 +34,25 @@ public abstract class Item {
 
     @ManyToMany(mappedBy = "items")
     private List<Category> categories = new ArrayList<>();
+
+    /**
+     * @Method         : addStock
+     * @Description    : stock 증가
+     * @Author         : donguk
+     * @Date           : 2024. 02. 28.
+     * @param          : quantity
+     * @return         :
+     */
+    public void addStock(int quantity) {
+        this.stockQuantity += quantity;
+    }
+
+    public void removeStock(int quantity) {
+        if(this.stockQuantity >= 0) {
+            this.stockQuantity -= quantity;
+        } else {
+            throw new NotEnoughStockException("need more stock");
+        }
+    }
 
 }
