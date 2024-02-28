@@ -29,4 +29,50 @@ public class OrderItem {
 
     private int orderPrice;
     private int count;
+
+    //생성 메서드//
+    /**
+     * @Method         : createOrderItem
+     * @Description    : 주문한 아이템 생성
+     * @Author         : gimeast
+     * @Date           : 2024. 02. 29.
+     * @params         : item, orderPrice, count
+     * @return         : OrderItem
+     */
+    public static OrderItem createOrderItem(Item item, int orderPrice, int count) {
+        OrderItem orderItem = new OrderItem();
+        orderItem.setItem(item);
+        orderItem.setOrderPrice(orderPrice);
+        orderItem.setCount(count);
+
+        item.removeStock(count);
+
+        return orderItem;
+    }
+
+
+    //비즈니스 로직//
+    /**
+     * @Method         : cancel
+     * @Description    : 주문취소로 인한 재고 증가 로직
+     * @Author         : gimeast
+     * @Date           : 2024. 02. 29.
+     * @params         :
+     * @return         :
+     */
+    public void cancel() {
+        this.item.addStock(count);
+    }
+
+    /**
+     * @Method         : getTotalPrice
+     * @Description    : 전체 주문 가격 조회를 위한 계산 로직
+     * @Author         : gimeast
+     * @Date           : 2024. 02. 29.
+     * @params         :
+     * @return         : int
+     */
+    public int getTotalPrice() {
+        return this.orderPrice * this.count;
+    }
 }
