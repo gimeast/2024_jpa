@@ -8,19 +8,4 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class OrderRepositoryTest {
 
-    @Autowired
-    OrderRepository orderRepository;
-
-    @Test
-    @DisplayName("찾기")
-    void find() {
-
-        //given
-        orderRepository.find(1L);
-
-        //when
-
-        //then
-
-    }
 }
