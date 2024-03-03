@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head data-th-replace="~{fragments/header :: header}">
+    <meta charset="UTF-8">
+    <title>Hello</title>
+</head>
+<body>
+
+<div class="container">
+
+    <div data-th-replace="~{fragments/bodyHeader :: bodyHeader}"></div>
+
+    <div class="jumbotron">
+        <h1>HELLO SHOP</h1>
+        <p class="lead">회원 기능</p>
+        <p>
+            <a href="/members/new" class="btn btn-lg btn-secondary">회원 가입</a>
+            <a href="/members" class="btn btn-lg btn-secondary">회원 목록</a>
+        </p>
+        <p class="lead" >상품 기능</p>
+        <p>
+            <a href="/items/new" class="btn btn-lg btn-dark">상품 등록</a>
+            <a href="/items" class="btn btn-lg btn-dark">상품 목록</a>
+        </p>
+        <p class="lead">주문기능</p>
+        <p>
+            <a href="/order" class="btn btn-lg btn-info">상품 주문</a>
+            <a href="/order" class="btn btn-lg btn-info">주문 내역</a>
+        </p>
+    </div>
+
+    <div data-th-replace="~{fragments/footer :: footer}"></div>
+
+</div>
+
+</body>
+</html>
