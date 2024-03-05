@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head data-th-replace="~{fragments/header :: header}"></head>
+
+<body>
+
+<div class="container">
+    <div data-th-replace="~{fragments/bodyHeader :: bodyHeader}"></div>
+    <div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>이름</th>
+                <th>도시</th>
+                <th>주소</th>
+                <th>우편번호</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr data-th-each="member : ${members}">
+                <td data-th-text="${member.id}"></td>
+                <td data-th-text="${member.name}"></td>
+                <td data-th-text="${member.address?.city}"></td>
+                <td data-th-text="${member.address?.street}"></td>
+                <td data-th-text="${member.address?.zipcode}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div data-th-replace="fragments/footer :: footer"></div>
+
+</div> <!-- /container -->
+
+</body>
+</html>
