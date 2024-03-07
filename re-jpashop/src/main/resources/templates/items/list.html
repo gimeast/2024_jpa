@@ -23,7 +23,7 @@
         <td data-th-text="${item.price}"></td>
         <td data-th-text="${item.stockQuantity}"></td>
         <td>
-          <a href="#" th:href="@{/items/{id}/edit (id=${item.id})}" class="btn btn-primary" role="button">수정</a>
+          <a href="#" data-th-href="@{/items/save (id=${item.id})}" class="btn btn-primary" role="button">수정</a>
         </td>
       </tr>
       </tbody>

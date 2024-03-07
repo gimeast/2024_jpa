@@ -2,10 +2,16 @@
 <html lang="en">
 <head data-th-replace="~{fragments/header :: header}"></head>
 <body>
+<script>
+    function save() {
+        submitForm('/items/save', '/items');
+    }
+</script>
 <div class="container">
     <div data-th-replace="fragments/bodyHeader :: bodyHeader"></div>
 
-    <form data-th-action="@{/items/new}" data-th-object="${form}" method="post">
+    <form data-th-action="@{/items/save}" data-th-object="${form}" method="post">
+        <input type="hidden" data-th-field="*{id}">
         <div class="form-group">
             <label data-th-for="name">상품명</label>
             <input type="text" data-th-field="*{name}" class="form-control" placeholder="이름을 입력하세요">
@@ -26,7 +32,7 @@
             <label data-th-for="isbn">ISBN</label>
             <input type="text" data-th-field="*{isbn}" class="form-control" placeholder="ISBN을 입력하세요">
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="button" onclick="save()" class="btn btn-primary">Submit</button>
     </form>
     <br/>
     <div data-th-replace="fragments/footer :: footer"></div>
@@ -35,3 +41,6 @@
 
 </body>
 </html>
+
+
+!
