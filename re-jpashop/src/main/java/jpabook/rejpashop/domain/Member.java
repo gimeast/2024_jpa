@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,6 +22,7 @@ public class Member {
     private Long id;
 
     @Column(unique = true)
+//    @NotEmpty 엔티티에 부가적인걸 추가하지말자!
     private String name;
 
     @Embedded
