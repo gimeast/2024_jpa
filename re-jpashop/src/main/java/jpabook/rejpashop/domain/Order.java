@@ -78,7 +78,7 @@ public class Order {
         Order order = new Order();
         order.setMember(member);
         order.setDelivery(delivery);
-        order.setOrderItems(Arrays.stream(orderItems).toList());
+        Arrays.stream(orderItems).forEach(order::addOrderItem);
         order.setStatus(OrderStatus.ORDER);
         order.setOrderDate(LocalDateTime.now());
 

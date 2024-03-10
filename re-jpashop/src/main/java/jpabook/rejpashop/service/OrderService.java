@@ -10,9 +10,12 @@ import jpabook.rejpashop.domain.item.Item;
 import jpabook.rejpashop.repository.ItemRepository;
 import jpabook.rejpashop.repository.MemberRepository;
 import jpabook.rejpashop.repository.OrderRepository;
+import jpabook.rejpashop.repository.OrderSearch;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -69,5 +72,8 @@ public class OrderService {
     }
 
     //검색
+    public List<Order> findOrders(OrderSearch orderSearch) {
+        return orderRepository.findAllByCriteria(orderSearch);
+    }
 
 }
