@@ -19,3 +19,21 @@ setter가 모두 열려있다면 변경포인트가 너무 많아서 유지보�
 *트랜잭션 스크립트 패턴*이라 한다.
 ```
 
+## 변경 감지와 병함(merge)
+```
+준영속 엔티티
+- 영속성 컨텍스트가 더는 관리하지 않는 엔티티를 말한다.
+
+Book book = new Book();
+book.setId(bookForm.getId());
+book.setName(bookForm.getName());
+book.setPrice(bookForm.getPrice());
+book.setStockQuantity(bookForm.getStockQuantity());
+book.setAuthor(bookForm.getAuthor());
+book.setIsbn(bookForm.getIsbn());
+이렇게 식별자가 존재하도록 임의로 만들어낸 엔티티를 준영속 엔티티로 본다.
+```
+
+### 준영속 엔티티를 수정하는 2가지 방법
+- 변경 감지 기능 사용
+- 병합 사용

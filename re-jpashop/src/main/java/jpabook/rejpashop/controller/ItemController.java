@@ -28,12 +28,7 @@ public class ItemController {
 
         if (id != null) {
             Book item = (Book) itemService.findOne(id);
-            bookForm.setId(item.getId());
-            bookForm.setName(item.getName());
-            bookForm.setPrice(item.getPrice());
-            bookForm.setStockQuantity(item.getStockQuantity());
-            bookForm.setAuthor(item.getAuthor());
-            bookForm.setIsbn(item.getIsbn());
+            bookForm.bookToBookForm(item);
         }
 
         model.addAttribute("form", bookForm);

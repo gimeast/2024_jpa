@@ -58,5 +58,19 @@ public abstract class Item {
         }
 
     }
+    
+    /**
+     * @Method         : changeItem
+     * @Description    : 더티체킹 해주는 메서드
+     * @Author         : gimeast
+     * @Date           : 2024. 03. 10.
+     * @params         : name, price, stockQuantity
+     * @return         :
+     */
+    public void changeItem(String name, int price, int stockQuantity) {
+        this.name = name;
+        this.price = price;
+        this.stockQuantity = stockQuantity;
+    }
 
 }

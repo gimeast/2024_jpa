@@ -17,7 +17,15 @@ public class ItemService {
 
     @Transactional
     public void saveItem(Item item) {
-        itemRepository.save(item);
+        Long id = item.getId();
+
+        if (id != null) {
+            Item findItem = itemRepository.findOne(id);
+            //더티체킹 편의 메서드
+            findItem.changeItem(item.getName(), item.getPrice(), item.getStockQuantity());
+        } else {
+            itemRepository.save(item);
+        }
     }
 
     public List<Item> findItems() {
