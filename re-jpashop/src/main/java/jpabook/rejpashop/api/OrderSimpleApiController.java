@@ -20,6 +20,14 @@ public class OrderSimpleApiController {
 
     private final OrderRepository orderRepository;
 
+    /**
+     * @Method         : ordersV1
+     * @Description    : 엔티티를 직접 반환 - 절대 하지말것
+     * @Author         : gimeast
+     * @Date           : 2024. 03. 13.
+     * @params         : 
+     * @return         : List<Order>
+     */
     @GetMapping("/api/v1/simple-orders")
     public List<Order> ordersV1() {
         List<Order> all = orderRepository.findAllByCriteria(new OrderSearch());
@@ -30,9 +38,33 @@ public class OrderSimpleApiController {
         return all;
     }
 
+    /**
+     * @Method         : ordersV2
+     * @Description    : Dto로 결과값 반환 - N + 1 문제 발생
+     * @Author         : gimeast
+     * @Date           : 2024. 03. 13.
+     * @params         :
+     * @return         : List<SimpleOrderDto>
+     */
     @GetMapping("/api/v2/simple-orders")
     public List<SimpleOrderDto> ordersV2() {
         List<Order> orders = orderRepository.findAllByCriteria(new OrderSearch());
+        return orders.stream()
+                .map(SimpleOrderDto::new)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * @Method         : ordersV3
+     * @Description    : fetch join을 이용한 N+1문제 해결
+     * @Author         : gimeast
+     * @Date           : 2024. 03. 13.
+     * @params         :
+     * @return         : List<SimpleOrderDto>
+     */
+    @GetMapping("/api/v3/simple-orders")
+    public List<SimpleOrderDto> ordersV3() {
+        List<Order> orders = orderRepository.findAllWidthMemberDelivery();
         return orders.stream()
                 .map(SimpleOrderDto::new)
                 .collect(Collectors.toList());
