@@ -1,10 +1,12 @@
 package jpabook.rejpashop.api;
 
+import jpabook.rejpashop.repository.order.simplequery.OrderSimpleQueryDto;
 import jpabook.rejpashop.domain.Address;
 import jpabook.rejpashop.domain.Order;
 import jpabook.rejpashop.domain.OrderStatus;
 import jpabook.rejpashop.repository.OrderRepository;
 import jpabook.rejpashop.repository.OrderSearch;
+import jpabook.rejpashop.repository.order.simplequery.OrderSimpleQueryRepository;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +21,7 @@ import java.util.stream.Collectors;
 public class OrderSimpleApiController {
 
     private final OrderRepository orderRepository;
+    private final OrderSimpleQueryRepository orderSimpleQueryRepository;
 
     /**
      * @Method         : ordersV1
@@ -68,6 +71,11 @@ public class OrderSimpleApiController {
         return orders.stream()
                 .map(SimpleOrderDto::new)
                 .collect(Collectors.toList());
+    }
+
+    @GetMapping("/api/v4/simple-orders")
+    public List<OrderSimpleQueryDto> ordersV4() {
+        return orderSimpleQueryRepository.findOrderDtos();
     }
 
     @Data
