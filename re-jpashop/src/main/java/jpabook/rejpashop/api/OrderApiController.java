@@ -6,18 +6,13 @@ import jpabook.rejpashop.domain.OrderItem;
 import jpabook.rejpashop.domain.OrderStatus;
 import jpabook.rejpashop.repository.OrderRepository;
 import jpabook.rejpashop.repository.OrderSearch;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RestController
 @RequiredArgsConstructor
@@ -42,6 +37,15 @@ public class OrderApiController {
     @GetMapping("/api/v2/orders")
     public List<OrderDto> ordersV2() {
         List<Order> orders = orderRepository.findAllByCriteria(new OrderSearch());
+        return orders.stream()
+                .map(OrderDto::new)
+                .toList();
+    }
+
+    @GetMapping("/api/v3/orders")
+    public List<OrderDto> ordersV3() {
+        List<Order> orders = orderRepository.findAllWithItem();
+
         return orders.stream()
                 .map(OrderDto::new)
                 .toList();
