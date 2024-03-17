@@ -38,7 +38,7 @@ public abstract class Item {
     /**
      * @Method         : addStock
      * @Description    : stock 증가
-     * @Author         : donguk
+     * @Author         : gimeast
      * @Date           : 2024. 02. 28.
      * @param          : quantity
      * @return         :
