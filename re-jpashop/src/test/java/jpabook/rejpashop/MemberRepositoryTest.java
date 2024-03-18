@@ -1,7 +1,7 @@
 package jpabook.rejpashop;
 
 import jpabook.rejpashop.domain.Member;
-import jpabook.rejpashop.repository.MemberRepository;
+import jpabook.rejpashop.repository.MemberRepositoryOld;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.*;
 public class MemberRepositoryTest {
 
     @Autowired
-    MemberRepository memberRepository;
+    MemberRepositoryOld memberRepositoryOld;
 
     @Test
     @DisplayName("저장")
@@ -27,8 +27,8 @@ public class MemberRepositoryTest {
         member.setName("홍길동");
 
         //when
-        memberRepository.save(member);
-        Member findMember = memberRepository.findOne(1L);
+        memberRepositoryOld.save(member);
+        Member findMember = memberRepositoryOld.findOne(1L);
 
         //then
         assertThat(findMember.getId()).isEqualTo(member.getId());

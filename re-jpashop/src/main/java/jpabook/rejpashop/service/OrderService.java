@@ -1,15 +1,13 @@
 package jpabook.rejpashop.service;
 
 import jpabook.rejpashop.api.OrderDto;
-import jpabook.rejpashop.domain.Address;
 import jpabook.rejpashop.domain.Delivery;
-import jpabook.rejpashop.domain.DeliveryStatus;
 import jpabook.rejpashop.domain.Member;
 import jpabook.rejpashop.domain.Order;
 import jpabook.rejpashop.domain.OrderItem;
 import jpabook.rejpashop.domain.item.Item;
 import jpabook.rejpashop.repository.ItemRepository;
-import jpabook.rejpashop.repository.MemberRepository;
+import jpabook.rejpashop.repository.MemberRepositoryOld;
 import jpabook.rejpashop.repository.OrderRepository;
 import jpabook.rejpashop.repository.OrderSearch;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +22,7 @@ import java.util.List;
 public class OrderService {
 
     private final OrderRepository orderRepository;
-    private final MemberRepository memberRepository;
+    private final MemberRepositoryOld memberRepositoryOld;
     private final ItemRepository itemRepository;
 
 
@@ -39,7 +37,7 @@ public class OrderService {
     @Transactional
     public Long order(Long memberId, Long itemId, int count) {
         //엔티티 조회
-        Member findMember = memberRepository.findOne(memberId);
+        Member findMember = memberRepositoryOld.findOne(memberId);
         Item findItem = itemRepository.findOne(itemId);
 
         //배송정보 생성

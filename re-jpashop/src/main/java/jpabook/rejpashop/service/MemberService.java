@@ -2,6 +2,7 @@ package jpabook.rejpashop.service;
 
 import jpabook.rejpashop.domain.Member;
 import jpabook.rejpashop.repository.MemberRepository;
+import jpabook.rejpashop.repository.MemberRepositoryOld;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +14,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class MemberService {
 
+    private final MemberRepositoryOld memberRepositoryOld;
     private final MemberRepository memberRepository;
 
     /**
@@ -26,6 +28,7 @@ public class MemberService {
     @Transactional
     public Long join(Member member) {
         validateDuplicateMember(member);
+//        memberRepositoryOld.save(member);
         memberRepository.save(member);
         return member.getId();
     }
@@ -40,6 +43,7 @@ public class MemberService {
      */
     private void validateDuplicateMember(Member member) {
 
+//        List<Member> findMembers = memberRepositoryOld.findByName(member.getName());
         List<Member> findMembers = memberRepository.findByName(member.getName());
 
         if (!findMembers.isEmpty()) throw new IllegalStateException("이미 존재하는 회원 입니다.");
@@ -55,6 +59,7 @@ public class MemberService {
      * @return         : 회원 목록 반환
      */
     public List<Member> findMembers() {
+//        return memberRepositoryOld.findAll();
         return memberRepository.findAll();
     }
 
@@ -67,12 +72,14 @@ public class MemberService {
      * @return         : 회원 반환
      */
     public Member findOne(Long memberId) {
-        return memberRepository.findOne(memberId);
+//        return memberRepositoryOld.findOne(memberId);
+        return memberRepository.findById(memberId).orElseThrow(IllegalStateException::new);
     }
 
     @Transactional
     public void update(Long id, String name) {
-        Member member = memberRepository.findOne(id);
+//        Member member = memberRepositoryOld.findOne(id);
+        Member member = memberRepository.findById(id).orElseThrow(IllegalStateException::new);
         member.setName(name);
     }
 }
