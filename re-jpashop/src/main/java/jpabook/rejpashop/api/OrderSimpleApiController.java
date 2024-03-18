@@ -1,26 +1,22 @@
 package jpabook.rejpashop.api;
 
+import jpabook.rejpashop.repository.order.query.SimpleOrderDto;
 import jpabook.rejpashop.repository.order.simplequery.OrderSimpleQueryDto;
-import jpabook.rejpashop.domain.Address;
 import jpabook.rejpashop.domain.Order;
-import jpabook.rejpashop.domain.OrderStatus;
 import jpabook.rejpashop.repository.OrderRepository;
-import jpabook.rejpashop.repository.OrderSearch;
 import jpabook.rejpashop.repository.order.simplequery.OrderSimpleQueryRepository;
-import lombok.Data;
+import jpabook.rejpashop.service.query.OrderSimpleQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
 public class OrderSimpleApiController {
 
-    private final OrderRepository orderRepository;
+    private final OrderSimpleQueryService orderSimpleQueryService;
     private final OrderSimpleQueryRepository orderSimpleQueryRepository;
 
     /**
@@ -33,12 +29,7 @@ public class OrderSimpleApiController {
      */
     @GetMapping("/api/v1/simple-orders")
     public List<Order> ordersV1() {
-        List<Order> all = orderRepository.findAllByCriteria(new OrderSearch());
-        for (Order order : all) {
-            order.getMember().getName(); //LAZY 강제 초기화
-            order.getDelivery().getAddress(); //LAZY 강제 초기화
-        }
-        return all;
+        return orderSimpleQueryService.getOrdersV1();
     }
 
     /**
@@ -51,10 +42,7 @@ public class OrderSimpleApiController {
      */
     @GetMapping("/api/v2/simple-orders")
     public List<SimpleOrderDto> ordersV2() {
-        List<Order> orders = orderRepository.findAllByCriteria(new OrderSearch());
-        return orders.stream()
-                .map(SimpleOrderDto::new)
-                .collect(Collectors.toList());
+        return orderSimpleQueryService.getSimpleOrderDtosV2();
     }
 
     /**
@@ -67,10 +55,7 @@ public class OrderSimpleApiController {
      */
     @GetMapping("/api/v3/simple-orders")
     public List<SimpleOrderDto> ordersV3() {
-        List<Order> orders = orderRepository.findAllWithMemberDelivery();
-        return orders.stream()
-                .map(SimpleOrderDto::new)
-                .collect(Collectors.toList());
+        return orderSimpleQueryService.getSimpleOrderDtosV3();
     }
 
     @GetMapping("/api/v4/simple-orders")
@@ -78,20 +63,5 @@ public class OrderSimpleApiController {
         return orderSimpleQueryRepository.findOrderDtos();
     }
 
-    @Data
-    private class SimpleOrderDto {
-        private Long orderId;
-        private String name;
-        private LocalDateTime orderDate;
-        private OrderStatus orderStatus;
-        private Address address;
 
-        public SimpleOrderDto(Order order) {
-            orderId = order.getId();
-            name = order.getMember().getName(); //LAZY 초기화
-            orderDate = order.getOrderDate();
-            orderStatus = order.getStatus();
-            address = order.getDelivery().getAddress(); //LAZY 초기화
-        }
-    }
 }

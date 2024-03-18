@@ -1,5 +1,6 @@
 package jpabook.rejpashop.service;
 
+import jpabook.rejpashop.api.OrderDto;
 import jpabook.rejpashop.domain.Address;
 import jpabook.rejpashop.domain.Delivery;
 import jpabook.rejpashop.domain.DeliveryStatus;
@@ -76,4 +77,39 @@ public class OrderService {
         return orderRepository.findAllByCriteria(orderSearch);
     }
 
+    public List<Order> getOrdersV1() {
+        List<Order> all = orderRepository.findAllByCriteria(new OrderSearch());
+        for (Order order : all) {
+            order.getMember().getName();
+            order.getDelivery().getAddress();
+
+            List<OrderItem> orderItems = order.getOrderItems();
+            orderItems.forEach(orderItem -> orderItem.getItem().getName());
+        }
+
+        return all;
+    }
+
+    public List<OrderDto> getOrderDtosV2() {
+        List<Order> orders = orderRepository.findAllByCriteria(new OrderSearch());
+        return orders.stream()
+                .map(OrderDto::new)
+                .toList();
+    }
+
+    public List<OrderDto> getOrderDtosV3() {
+        List<Order> orders = orderRepository.findAllWithItem();
+
+        return orders.stream()
+                .map(OrderDto::new)
+                .toList();
+    }
+
+    public List<OrderDto> getOrderDtos(int offset, int limit) {
+        List<Order> orders = orderRepository.findAllWithMemberDelivery(offset, limit);
+
+        return orders.stream()
+                .map(OrderDto::new)
+                .toList();
+    }
 }
