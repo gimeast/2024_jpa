@@ -1,7 +1,6 @@
 package jpabook.rejpashop.service.query;
 
 
-import jakarta.persistence.EntityManager;
 import jpabook.rejpashop.domain.Order;
 import jpabook.rejpashop.domain.OrderItem;
 import jpabook.rejpashop.repository.OrderRepository;
@@ -21,8 +20,8 @@ public class OrderSimpleQueryService {
 
     private final OrderRepository orderRepository;
 
-    public List<Order> getOrdersV1() {
-        List<Order> all = orderRepository.findAllByCriteria(new OrderSearch());
+    public List<Order> getOrdersV1(OrderSearch orderSearch) {
+        List<Order> all = orderRepository.findAll(orderSearch);
         for (Order order : all) {
             order.getMember().getName(); //LAZY 강제 초기화
             order.getDelivery().getAddress(); //LAZY 강제 초기화

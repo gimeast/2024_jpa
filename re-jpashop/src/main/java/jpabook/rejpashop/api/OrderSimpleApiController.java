@@ -1,9 +1,9 @@
 package jpabook.rejpashop.api;
 
+import jpabook.rejpashop.repository.OrderSearch;
 import jpabook.rejpashop.repository.order.query.SimpleOrderDto;
 import jpabook.rejpashop.repository.order.simplequery.OrderSimpleQueryDto;
 import jpabook.rejpashop.domain.Order;
-import jpabook.rejpashop.repository.OrderRepository;
 import jpabook.rejpashop.repository.order.simplequery.OrderSimpleQueryRepository;
 import jpabook.rejpashop.service.query.OrderSimpleQueryService;
 import lombok.RequiredArgsConstructor;
@@ -28,8 +28,8 @@ public class OrderSimpleApiController {
      * @return         : List<Order>
      */
     @GetMapping("/api/v1/simple-orders")
-    public List<Order> ordersV1() {
-        return orderSimpleQueryService.getOrdersV1();
+    public List<Order> ordersV1(OrderSearch orderSearch) {
+        return orderSimpleQueryService.getOrdersV1(orderSearch);
     }
 
     /**
