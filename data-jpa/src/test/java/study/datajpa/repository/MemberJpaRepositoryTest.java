@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import study.datajpa.entity.Member;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -22,7 +21,7 @@ class MemberJpaRepositoryTest {
     @Rollback(value = false)
     void testMember() {
         //given
-        Member member = new Member("userA");
+        Member member = new Member("userA", 10, null);
         Member savedMember = memberJpaRepository.save(member);
         //when
         Member findMember = memberJpaRepository.find(savedMember.getId());

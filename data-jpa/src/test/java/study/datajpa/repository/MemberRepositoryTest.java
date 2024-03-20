@@ -10,7 +10,6 @@ import study.datajpa.entity.Member;
 import study.datajpa.exception.MemberNotFoundException;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -23,7 +22,7 @@ class MemberRepositoryTest {
     @DisplayName("Spring data JPA를 이용한 member 생성 및 조회")
     @Rollback(value = false)
     void testMember() {
-        Member member = new Member("userB");
+        Member member = new Member("userB", 10, null);
         Member savedMember = memberRepository.save(member);
         //when
 
