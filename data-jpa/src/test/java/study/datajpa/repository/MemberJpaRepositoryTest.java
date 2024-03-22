@@ -81,6 +81,19 @@ class MemberJpaRepositoryTest {
 
         //then
         assertThat(findMembers.size()).isEqualTo(1);
+    }
 
+    @Test
+    @DisplayName("JPA NamedQuery 테스트")
+    void testNamedQuery() {
+        //given
+        Member member1 = new Member("member_A", 20, null);
+        Member member2 = new Member("member_B", 30, null);
+        memberJpaRepository.save(member1);
+        memberJpaRepository.save(member2);
+        //when
+        List<Member> memberB = memberJpaRepository.findByUsernameNamedQuery("member_B");
+        //then
+        assertThat(memberB.get(0)).isEqualTo(member2);
     }
 }

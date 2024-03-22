@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -18,6 +19,10 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "member")
 @ToString(of = {"id", "username", "age"}) //연관관계 team은 toString 안하는게 좋다
+@NamedQuery(
+        name = "Member.findByUsernameNamedQuery",
+        query="select m from Member m where m.username = :username"
+)
 public class Member {
 
     @Id @GeneratedValue
