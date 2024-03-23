@@ -106,4 +106,17 @@ class MemberRepositoryTest {
         //then
         assertThat(memberB.get(0)).isEqualTo(member2);
     }
+    @Test
+    @DisplayName("JPA NamedQuery 테스트")
+    void testQuery() {
+        //given
+        Member member1 = new Member("member_A", 20, null);
+        Member member2 = new Member("member_B", 30, null);
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+        //when
+        List<Member> memberB = memberRepository.findByUser("member_B", 30);
+        //then
+        assertThat(memberB.get(0)).isEqualTo(member2);
+    }
 }
