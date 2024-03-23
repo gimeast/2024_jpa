@@ -6,9 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
+import study.datajpa.dto.MemberDto;
 import study.datajpa.entity.Member;
+import study.datajpa.entity.Team;
 import study.datajpa.exception.MemberNotFoundException;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -19,6 +22,9 @@ class MemberRepositoryTest {
 
     @Autowired
     MemberRepository memberRepository;
+
+    @Autowired
+    TeamRepository teamRepository;
     
     @Test
     @DisplayName("Spring data JPA를 이용한 member 생성 및 조회")
@@ -106,6 +112,7 @@ class MemberRepositoryTest {
         //then
         assertThat(memberB.get(0)).isEqualTo(member2);
     }
+
     @Test
     @DisplayName("JPA NamedQuery 테스트")
     void testQuery() {
@@ -118,5 +125,38 @@ class MemberRepositoryTest {
         List<Member> memberB = memberRepository.findByUser("member_B", 30);
         //then
         assertThat(memberB.get(0)).isEqualTo(member2);
+    }
+
+    @Test
+    @DisplayName("@Query로 값 조회하기")
+    void testQuery2() {
+        //given
+        Member member1 = new Member("member_A", 20, null);
+        Member member2 = new Member("member_B", 30, null);
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+        //when
+        List<String> username = memberRepository.findByUsernameList();
+        //then
+        username.forEach(System.out::println);
+    }
+
+    @Test
+    @DisplayName("jpql에 new Operator 사용하여 dto로 바로 조회하기")
+    @Rollback(value = false)
+    void testQuery3() {
+        //given
+        Team teamA = new Team("teamA");
+        Team teamB = new Team("teamB");
+        teamRepository.saveAll(Arrays.asList(teamA, teamB));
+
+        Member member1 = new Member("member_A", 20, teamA);
+        Member member2 = new Member("member_B", 30, teamB);
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+        //when
+        List<MemberDto> username = memberRepository.findMemberDto();
+        //then
+        username.forEach(System.out::println);
     }
 }
