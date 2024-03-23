@@ -4,6 +4,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import study.datajpa.dto.MemberDto;
@@ -195,6 +199,138 @@ class MemberRepositoryTest {
         findListMember.forEach(System.out::println);
         System.out.println("findMember = " + findMember);
         System.out.println("findOptionalMember = " + findOptionalMember.get());
+    }
+
+    @Test
+    @DisplayName("Spring data JPA를 이용한 페이징")
+    void testPaging() {
+        //given
+        for (int i = 0; i < 54; i++) {
+            Member member1 = new Member("member_"+i, 20+i, null);
+            Member member2 = new Member("AAA"+i, 10, null);
+            memberRepository.save(member1);
+            memberRepository.save(member2);
+        }
+
+        int age = 10;
+        PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "username"));
+
+        //when
+        Page<Member> memberPage = memberRepository.findPageByAge(age, pageRequest);
+
+        //then
+        System.out.println("===================페이지================");
+        List<Member> content = memberPage.getContent();
+
+        long totalElements = memberPage.getTotalElements();
+        int totalPages = memberPage.getTotalPages();
+        int numberOfElements = memberPage.getNumberOfElements();
+        int number = memberPage.getNumber();
+        int size = memberPage.getSize();
+        boolean first = memberPage.isFirst();
+        boolean last = memberPage.isLast();
+        boolean hasPrev = memberPage.hasPrevious();
+        boolean hasNext = memberPage.hasNext();
+
+        System.out.println("content = " + content);
+        System.out.println("전체 페이지 데이터 수 = " + totalElements);
+        System.out.println("총 페이지 수 = " + totalPages);
+        System.out.println("조회한 페이지의 데이터 수 = " + numberOfElements);
+        System.out.println("현재 페이지 번호 = " + number);
+        System.out.println("페이지당 나타낼 수 있는 데이터 수 = " + size);
+        System.out.println("첫 페이지 여부 = " + first);
+        System.out.println("마지막 페이지 여부 = " + last);
+        System.out.println("이전 페이지 존재 여부 = " + hasPrev);
+        System.out.println("다음 페이지 존재 여부 = " + hasNext);
+        System.out.println("============================================");
+    }
+
+    @Test
+    @DisplayName("Spring data JPA를 이용한 slice")
+    void testSlicePaging() {
+        //given
+        for (int i = 0; i < 54; i++) {
+            Member member1 = new Member("member_"+i, 20+i, null);
+            Member member2 = new Member("AAA"+i, 10, null);
+            memberRepository.save(member1);
+            memberRepository.save(member2);
+        }
+
+        int age = 10;
+        PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "username"));
+
+        //when
+        Slice<Member> memberSlice = memberRepository.findSliceByAge(age, pageRequest);
+
+        //then
+        System.out.println("=================슬라이스=================");
+
+        List<Member> sliceContent = memberSlice.getContent();
+//        memberSlice.getTotalElements();
+//        memberSlice.getTotalPages();
+        int sliceNumberOfElements = memberSlice.getNumberOfElements();
+        int sliceNumber = memberSlice.getNumber();
+        int sliceSize = memberSlice.getSize();
+        boolean sliceFirst = memberSlice.isFirst();
+        boolean sliceLast = memberSlice.isLast();
+        boolean sliceHasPrevious = memberSlice.hasPrevious();
+        boolean sliceHasNext = memberSlice.hasNext();
+
+        System.out.println("sliceContent = " + sliceContent);
+        System.out.println("sliceNumberOfElements = " + sliceNumberOfElements);
+        System.out.println("sliceNumber = " + sliceNumber);
+        System.out.println("sliceSize = " + sliceSize);
+        System.out.println("sliceFirst = " + sliceFirst);
+        System.out.println("sliceLast = " + sliceLast);
+        System.out.println("sliceHasPrevious = " + sliceHasPrevious);
+        System.out.println("sliceHasNext = " + sliceHasNext);
+        System.out.println("============================================");
+    }
+
+    @Test
+    @DisplayName("paging 반환을 dto로")
+    void pagingResultToDto() {
+        //given
+        for (int i = 0; i < 54; i++) {
+            Member member1 = new Member("member_"+i, 20+i, null);
+            Member member2 = new Member("AAA"+i, 10, null);
+            memberRepository.save(member1);
+            memberRepository.save(member2);
+        }
+
+        int age = 10;
+        PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "username"));
+
+        //when
+        Page<Member> memberPage = memberRepository.findPageByAge(age, pageRequest);
+
+        Page<MemberDto> memberDtoPage = memberPage.map(m -> new MemberDto(m.getId(), m.getUsername(), null));
+
+        //then
+        System.out.println("===================페이지================");
+        List<MemberDto> content = memberDtoPage.getContent();
+
+        long totalElements = memberDtoPage.getTotalElements();
+        int totalPages = memberDtoPage.getTotalPages();
+        int numberOfElements = memberDtoPage.getNumberOfElements();
+        int number = memberDtoPage.getNumber();
+        int size = memberDtoPage.getSize();
+        boolean first = memberDtoPage.isFirst();
+        boolean last = memberDtoPage.isLast();
+        boolean hasPrev = memberDtoPage.hasPrevious();
+        boolean hasNext = memberDtoPage.hasNext();
+
+        System.out.println("content = " + content);
+        System.out.println("전체 페이지 데이터 수 = " + totalElements);
+        System.out.println("총 페이지 수 = " + totalPages);
+        System.out.println("조회한 페이지의 데이터 수 = " + numberOfElements);
+        System.out.println("현재 페이지 번호 = " + number);
+        System.out.println("페이지당 나타낼 수 있는 데이터 수 = " + size);
+        System.out.println("첫 페이지 여부 = " + first);
+        System.out.println("마지막 페이지 여부 = " + last);
+        System.out.println("이전 페이지 존재 여부 = " + hasPrev);
+        System.out.println("다음 페이지 존재 여부 = " + hasNext);
+        System.out.println("============================================");
     }
 
 

@@ -19,3 +19,31 @@
 * 편리하다.
 * 실행 시점에 애플리케이션 로딩 시점에 오류를 발견할 수 있다.
 * new Operator를 사용하여 dto에 바로 값을 넣을 수 있다.
+
+## JPA 페이징
+### Page와 Slice
+* page는 일반 페이징과 같다.
+* page는 1부터가 아닌 0부터 시작이다.
+* slice는 앱에서 주로 맨 밑으로 내렸을때 나오는 더보기 기능에 사용된다.
+* slice는 limit이 10이면 +1 해서 맨 밑으로 왔을때 +1이 있으면 더보기를 할수있게 하는 로직이다.
+
+### pageable에 대한 정보
+```
+last : 마지막 페이지인지
+totalElements : DB의 전체 데이터 개수
+totlaPages : 만들수 있는 page수
+size : 페이지당 나타낼수 있는 데이터 개수
+number : 현재 페이지 번호
+sort : 정렬 정보
+first : 첫번쨰 페이지 인지
+numberOfElements : 실제 데이터 개수 
+empty : 리스트가 비어있는지 여부
+hasNext : 다음 페이지 존재 여부
+```
+
+<span style="background-color:#FFE6E6; color:dimgray">
+total count를 구할때 where문에 조건이 없는 경우라면 countQuery를 이용해서 left join을 제거해야 한다.
+</span>
+
+### Entity Paging을 Dto Paging으로 변환
+Page.map 기능을 활용해서 dto 생성자에 엔티티 값을 설정하여 Page<DTO>로 반환 한다.
