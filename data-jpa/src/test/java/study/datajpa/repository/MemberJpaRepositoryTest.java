@@ -96,4 +96,24 @@ class MemberJpaRepositoryTest {
         //then
         assertThat(memberB.get(0)).isEqualTo(member2);
     }
+
+    @Test
+    @DisplayName("JPA 페이징 테스트")
+    void testPaging() {
+        //given
+        for (int i = 0; i < 54; i++) {
+            Member member1 = new Member("member_"+i, 20+i, null);
+            Member member2 = new Member("AAA"+i, 10, null);
+            memberJpaRepository.save(member1);
+            memberJpaRepository.save(member2);
+
+        }
+        //when
+        long totalCount = memberJpaRepository.totalCount(10);
+        List<Member> findMemberList = memberJpaRepository.findByPage(10, 3, 10);
+
+        //then
+        System.out.println("totalCount = " + totalCount);
+        System.out.println("findMemberList = " + findMemberList);
+    }
 }

@@ -13,6 +13,7 @@ import study.datajpa.exception.MemberNotFoundException;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -159,4 +160,42 @@ class MemberRepositoryTest {
         //then
         username.forEach(System.out::println);
     }
+
+    @Test
+    @DisplayName("jpql에서 in절 예제")
+    @Rollback(value = false)
+    void testQuery4() {
+        //given
+        Member member1 = new Member("member_A", 20, null);
+        Member member2 = new Member("member_B", 30, null);
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+
+        //when
+        List<Member> findMember = memberRepository.findByNames(Arrays.asList("member_A", "member_B"));
+        //then
+        findMember.forEach(System.out::println);
+    }
+
+    @Test
+    @DisplayName("여러 반환타입 테스트")
+    @Rollback(value = false)
+    void returnType() {
+        //given
+        Member member1 = new Member("member_A", 20, null);
+        Member member2 = new Member("member_B", 30, null);
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+
+        //when
+        List<Member> findListMember = memberRepository.findListByUsername("member_A");
+        Member findMember = memberRepository.findMemberByUsername("member_B");
+        Optional<Member> findOptionalMember = memberRepository.findOptionalByUsername("member_B");
+        //then
+        findListMember.forEach(System.out::println);
+        System.out.println("findMember = " + findMember);
+        System.out.println("findOptionalMember = " + findOptionalMember.get());
+    }
+
+
 }
