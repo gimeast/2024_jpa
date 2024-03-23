@@ -159,4 +159,20 @@ class MemberRepositoryTest {
         //then
         username.forEach(System.out::println);
     }
+
+    @Test
+    @DisplayName("jpql에서 in절 예제")
+    @Rollback(value = false)
+    void testQuery4() {
+        //given
+        Member member1 = new Member("member_A", 20, null);
+        Member member2 = new Member("member_B", 30, null);
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+
+        //when
+        List<Member> findMember = memberRepository.findByNames(Arrays.asList("member_A", "member_B"));
+        //then
+        findMember.forEach(System.out::println);
+    }
 }
