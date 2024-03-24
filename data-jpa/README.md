@@ -47,3 +47,37 @@ total count를 구할때 where문에 조건이 없는 경우라면 countQuery를
 
 ### Entity Paging을 Dto Paging으로 변환
 Page.map 기능을 활용해서 dto 생성자에 엔티티 값을 설정하여 Page<DTO>로 반환 한다.
+
+
+## 벌크성 수정 쿼리
+* executeUpdate()는 INSERT, UPDATE, DELETE와 같은 DML(Data Manipulation Language)에서 실행 결과로 영향을 받은 레코드 수를 반환한다.
+* spring data jpa에서는 @Modifying을 붙여야 executeUpdate()가 실행된다.
+* @Modifying을 변경이 일어나는 쿼리와 함께 사용해야 JPA에서 변경 감지와 관련된 처리를 생략하고 더 효율적인 실행이 가능하다.
+
+
+## flush와 clear
+* flush는 변경 내용을 DB에 반영하는 것이다.
+* 🔥flush는 영속 컨텍스트를 비우지않는다.
+  * 1차 캐시가 유지된다. 🔥 
+  * 쓰기 지연 SQL 저장소의 쿼리문도 지워지지 않는다. 🔥
+
+* clear 메서드는 영속성 컨텍스트의 모든 엔티티를 초기화하는 역할을 한다.
+* 영속성 컨텍스트에 캐시된 모든 엔티티를 제거하고, 1차 캐시를 비우는 역할을 수행한다.
+
+```
+요약: flush는 앞에있는 쿼리를 반영하고 clear는 영속성 컨텍스트를 비운다.
+```
+
+## entity graph
+엔티티 그래프를 이용하면 페치조인을 매우 간편하게 할 수 있다.
+메소드 명으로 쿼리 생성시 페치 조인까지 하기 위한 방법이다.
+attributePaths 또는 NamedEntityGraph를 이용하여 사용하면된다. 
+
+
+
+
+
+
+
+
+
