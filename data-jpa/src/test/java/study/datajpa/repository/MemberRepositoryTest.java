@@ -35,6 +35,8 @@ class MemberRepositoryTest {
 
     @Autowired
     TeamRepository teamRepository;
+    @Autowired
+    MemberQueryRepository memberQueryRepository;
     
     @Test
     @DisplayName("Spring data JPA를 이용한 member 생성 및 조회")
@@ -470,4 +472,15 @@ class MemberRepositoryTest {
         System.out.println("findMember = " + findMember);
     }
     
+    @Test
+    @DisplayName("repository custom1")
+    void callCustom1() {
+        List<Member> result = memberRepository.findMemberCustom();
+    }
+    @Test
+    @DisplayName("repository custom2")
+    void callCustom2() {
+        List<Member> result = memberQueryRepository.findAllMembers();
+    }
+
 }
