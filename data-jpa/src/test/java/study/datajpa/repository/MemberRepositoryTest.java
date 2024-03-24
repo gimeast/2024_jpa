@@ -1,5 +1,7 @@
 package study.datajpa.repository;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,9 @@ import static org.assertj.core.api.Assertions.*;
 @SpringBootTest
 @Transactional
 class MemberRepositoryTest {
+
+    @PersistenceContext
+    EntityManager em;
 
     @Autowired
     MemberRepository memberRepository;
@@ -393,4 +398,36 @@ class MemberRepositoryTest {
         System.out.println("usernameList = " + usernameList);
     }
 
+    @Test
+    @DisplayName("entity graph 예제")
+    void entityGraphExample() {
+        //given
+        Team team1 = new Team("teamA");
+        Team team2 = new Team("teamB");
+        teamRepository.saveAll(Arrays.asList(team1, team2));
+
+        Member member1 = new Member("AAA", 30, team1);
+        Member member2 = new Member("BBB", 10, team2);
+
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+
+        em.flush();
+        em.clear();
+
+        //when
+//        List<Member> all = memberRepository.findAll();
+//        List<Member> all = memberRepository.findMemberFetchJoin();
+//        List<Member> all = memberRepository.findAll();
+//        List<Member> all = memberRepository.findMemberEntityGraph();
+        List<Member> all = memberRepository.findEntityGraphByUsername("AAA");
+
+        //then
+        for (Member member : all) {
+            System.out.println("member = " + member);
+            System.out.println("member.getClass() = " + member.getClass());
+            System.out.println("member.getTeam() = " + member.getTeam());
+        }
+    }
+    
 }

@@ -68,7 +68,10 @@ Page.map 기능을 활용해서 dto 생성자에 엔티티 값을 설정하여 P
 요약: flush는 앞에있는 쿼리를 반영하고 clear는 영속성 컨텍스트를 비운다.
 ```
 
-
+## entity graph
+엔티티 그래프를 이용하면 페치조인을 매우 간편하게 할 수 있다.
+메소드 명으로 쿼리 생성시 페치 조인까지 하기 위한 방법이다.
+attributePaths 또는 NamedEntityGraph를 이용하여 사용하면된다. 
 
 
 
