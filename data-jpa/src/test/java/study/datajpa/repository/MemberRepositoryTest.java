@@ -430,4 +430,44 @@ class MemberRepositoryTest {
         }
     }
     
+    @Test
+    @DisplayName("JPA Hint")
+    @Rollback(value = false)
+    void queryHint() {
+        //given
+        Member member = new Member("member1", 10, null);
+        memberRepository.save(member);
+        em.flush();
+        em.clear();
+        
+        //when
+        Member findMember = memberRepository.findById(member.getId()).get();
+        findMember.changeUserName("member2");
+        em.flush();
+        em.clear();
+
+        Member findMember2 = memberRepository.findReadOnlyByUsername("member2");
+        findMember2.changeUserName("member3");
+        em.flush();
+        em.clear();
+
+        System.out.println("findMember2 = " + findMember2);
+    }
+
+    @Test
+    @DisplayName("JPA Lock")
+    @Rollback(value = false)
+    void queryLock() {
+        //given
+        Member member = new Member("member1", 10, null);
+        memberRepository.save(member);
+        em.flush();
+        em.clear();
+
+        //when
+        Member findMember = memberRepository.findLockByUsername("member1");
+
+        System.out.println("findMember = " + findMember);
+    }
+    
 }
