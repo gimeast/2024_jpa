@@ -74,9 +74,29 @@ Page.map 기능을 활용해서 dto 생성자에 엔티티 값을 설정하여 P
 attributePaths 또는 NamedEntityGraph를 이용하여 사용하면된다. 
 
 
+## 사용자 정의 리포지토리 구현
+* 순수 JPA 직접 사용
+* 스프링 JDBC Template 사용
+* MyBatis 사용
+* 데이터베이스 커넥션 직접 사용
+* Querydsl 사용
 
+```
+data jpa에 커스텀한 repository interface를 상속해서 사용할 수 있다.
 
+※ repository custom할때 주의해야할 점은 class 이름을 
+JpaRepository를 상속 받은 interface의 이름 + Impl을 붙여야 한다.
+ex) MemberRepository, MemberRepositoryImpl 
 
+```
+
+```
+항상 사용자 정의 리포지토리가 필요한 것은 아니다. 그냥 임의의 리포지토리를 만들어도 된다.
+예를 들어 MemberQueryRepository를 인터페이스가 아닌 클래스로 만들고 스프링 빈으로 등록해서 그냥 직접 사용해도 된다.
+물론 이 경우 스프링 데이터 JPA와는 아무런 관계 없이 별도로 동작 한다.
+
+이렇게 repository를 분리해서 사용하는것이 조금더 구조적으로 핵심 비즈니스 로직과 아닌것을 분리하는것이 좋다.
+```
 
 
 
