@@ -20,7 +20,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "team")
 @ToString(of = {"id", "name"})
-public class Team {
+public class Team extends BaseEntity {
 
     @Id
     @GeneratedValue
