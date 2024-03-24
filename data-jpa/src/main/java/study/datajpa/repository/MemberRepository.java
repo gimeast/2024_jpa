@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import study.datajpa.dto.MemberDto;
@@ -46,4 +47,17 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Query(value = "select m from Member m left join m.team t",
             countQuery = "select count(m.username) from Member m")
     Page<Member> findByAge(int age, Pageable pageable);
+
+    @Modifying(flushAutomatically = true, clearAutomatically = true) //@Modifying을 변경이 일어나는 쿼리와 함께 사용해야 JPA에서 변경 감지와 관련된 처리를 생략하고 더 효율적인 실행이 가능하다.
+    @Query("update Member m set m.age = m.age +1 where m.age >= :age")
+    int bulkAgePlus(@Param("age") int age);
+
+    @Modifying(flushAutomatically = true, clearAutomatically = true) //@Modifying을 변경이 일어나는 쿼리와 함께 사용해야 JPA에서 변경 감지와 관련된 처리를 생략하고 더 효율적인 실행이 가능하다.
+    @Query("delete from Member m where m.age >= :age")
+    int bulkAgeDelete(@Param("age") int age);
+
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
+    @Query("insert into Member (username, age) values (:username, :age)")
+    int insertMemberByQuery(@Param("username") String username, @Param("age") int age);
+
 }

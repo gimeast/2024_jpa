@@ -333,5 +333,64 @@ class MemberRepositoryTest {
         System.out.println("============================================");
     }
 
+    @Test
+    @DisplayName("spring data jpa 벌크성 수정 쿼리 테스트")
+    @Rollback(value = false)
+    void bulkUpdate() {
+        //given
+        Member member1 = new Member("AAA", 30, null);
+        Member member2 = new Member("BBB", 10, null);
+        Member member3 = new Member("CCC", 20, null);
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+        memberRepository.save(member3);
+        //when
+        int result = memberRepository.bulkAgePlus(15);
+        //then
+        assertThat(result).isEqualTo(2);
+
+        Member findMember = memberRepository.findMemberByUsername("CCC");
+        System.out.println("findMember = " + findMember);
+
+    }
+
+    @Test
+    @DisplayName("spring data jpa 벌크성 삭제 쿼리 테스트")
+    @Rollback(value = false)
+    void bulkDelete() {
+        //given
+        Member member1 = new Member("AAA", 30, null);
+        Member member2 = new Member("BBB", 10, null);
+        Member member3 = new Member("CCC", 20, null);
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+        memberRepository.save(member3);
+        //when
+        int result = memberRepository.bulkAgeDelete(15);
+        //then
+        assertThat(result).isEqualTo(2);
+
+        List<String> usernameList = memberRepository.findByUsernameList();
+        System.out.println("usernameList = " + usernameList);
+
+    }
+
+    @Test
+    @DisplayName("spring data jpa 등록 쿼리 테스트")
+    @Rollback(value = false)
+    void insertByQuery() {
+        //given
+        Member member1 = new Member("AAA", 30, null);
+        Member member2 = new Member("BBB", 10, null);
+        Member member3 = new Member("CCC", 20, null);
+        memberRepository.insertMemberByQuery("DDD", 31);
+
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+        memberRepository.save(member3);
+
+        List<String> usernameList = memberRepository.findByUsernameList();
+        System.out.println("usernameList = " + usernameList);
+    }
 
 }

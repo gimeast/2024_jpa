@@ -116,4 +116,22 @@ class MemberJpaRepositoryTest {
         System.out.println("totalCount = " + totalCount);
         System.out.println("findMemberList = " + findMemberList);
     }
+    
+    @Test
+    @DisplayName("벌크성 수정 쿼리 테스트")
+    void bulkUpdate() {
+        //given
+        Member member1 = new Member("AAA", 30, null);
+        Member member2 = new Member("BBB", 10, null);
+        Member member3 = new Member("CCC", 20, null);
+        memberJpaRepository.save(member1);
+        memberJpaRepository.save(member2);
+        memberJpaRepository.save(member3);
+        //when
+        int result = memberJpaRepository.bulkAgePlus(15);
+        //then
+        assertThat(result).isEqualTo(2);
+
+    }
+    
 }
