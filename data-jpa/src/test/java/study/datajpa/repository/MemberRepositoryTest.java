@@ -545,4 +545,38 @@ class MemberRepositoryTest {
 
     }
 
+    @Test
+    @DisplayName("Projections")
+    void projections() {
+        //given
+        Team teamA = new Team("teamA");
+        em.persist(teamA);
+
+        Member member1 = new Member("m1", 0, teamA);
+        Member member2 = new Member("m2", 0, teamA);
+        em.persist(member1);
+        em.persist(member2);
+
+        em.flush();
+        em.clear();
+
+        //when
+        List<UsernameOnly> m1 = memberRepository.findProjectionsByUsername("m1");
+        List<UsernameOnlyDto> m2 = memberRepository.findDtoProjectionsByUsername("m1", UsernameOnlyDto.class);
+        List<NestedClosedProjections> m3 = memberRepository.findDtoProjectionsByUsername("m1", NestedClosedProjections.class);
+
+        //then
+        for (UsernameOnly usernameOnly : m1) {
+            System.out.println("usernameOnly.getUsername() = " + usernameOnly.getUsername());
+        }
+        for (UsernameOnlyDto usernameOnlyDto : m2) {
+            System.out.println("usernameOnlyDto.getUsername() = " + usernameOnlyDto.getUsername());
+        }
+        for (NestedClosedProjections nestedClosedProjections : m3) {
+            System.out.println("nestedClosedProjections.getUsername() = " + nestedClosedProjections.getUsername());
+            System.out.println("nestedClosedProjections.getTeam().getName() = " + nestedClosedProjections.getTeam().getName());
+        }
+
+    }
+
 }
