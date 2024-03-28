@@ -9,11 +9,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import study.querydsl.entity.Member;
-import study.querydsl.entity.QMember;
 import study.querydsl.entity.Team;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static study.querydsl.entity.QMember.*;
 
 @SpringBootTest
 @Transactional
@@ -60,12 +60,13 @@ public class QuerydslBasicTest {
     @Test
     @DisplayName("Querydsl 사용방법")
     void startQuerydsl() {
-        QMember qMember = new QMember("member"); //variable은 어떤 QMember인지 구분하는 이름을 주는 부분이다.
-
+//        1. QMember qMember = new QMember("member"); //variable은 어떤 QMember인지 구분하는 이름을 주는 부분이다.
+//        2. QMember qMember = QMember.member;
+//        3. static import 사용 => member
         Member findMember = queryFactory
-                .selectFrom(qMember)
-                .from(qMember)
-                .where(qMember.username.eq("member1"))
+                .selectFrom(member)
+                .from(member)
+                .where(member.username.eq("member1"))
                 .fetchOne();
 
         assertThat(findMember.getUsername()).isEqualTo("member1");
