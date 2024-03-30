@@ -158,8 +158,39 @@ public class QuerydslBasicTest {
         assertThat(member5.getUsername()).isEqualTo("member5");
         assertThat(member6.getUsername()).isEqualTo("member6");
         assertThat(memberNull.getUsername()).isNull();
-
     }
 
+    @Test
+    @DisplayName("페이징1")
+    void paging1() {
+        //given
+        List<Member> fetch = queryFactory
+                .selectFrom(member)
+                .orderBy(member.username.desc())
+                .offset(0)
+                .limit(2)
+                .fetch();
+
+        for (Member fetch1 : fetch) {
+            System.out.println("fetch1 = " + fetch1);
+        }
+
+        assertThat(fetch.size()).isEqualTo(2);
+    }
+    @Test
+    @DisplayName("페이징2")
+    void paging2() {
+        //given
+        QueryResults<Member> queryResults = queryFactory
+                .selectFrom(member)
+                .orderBy(member.username.desc())
+                .offset(1)
+                .limit(2)
+                .fetchResults();
+
+        assertThat(queryResults.getTotal()).isEqualTo(4);
+        assertThat(queryResults.getLimit()).isEqualTo(2);
+        assertThat(queryResults.getOffset()).isEqualTo(1);
+    }
 
 }
