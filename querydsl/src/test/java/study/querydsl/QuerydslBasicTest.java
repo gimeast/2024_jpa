@@ -239,4 +239,38 @@ public class QuerydslBasicTest {
         }
 
     }
+
+    @Test
+    @DisplayName("조인-기본 조인")
+    void join() {
+        List<Member> fetch = queryFactory
+                .selectFrom(member)
+                .join(member.team, team)
+                .where(team.name.eq("teamA"))
+                .fetch();
+
+        for (Member member : fetch) {
+            System.out.println("member = " + member);
+        }
+    }
+    
+    @Test
+    @DisplayName("세타 조인")
+    void theta_join() {
+        em.persist(new Member("teamA"));
+        em.persist(new Member("teamB"));
+        em.persist(new Member("teamC"));
+
+        List<Member> fetch = queryFactory
+                .select(member)
+                .from(member, team)
+                .where(member.username.eq(team.name))
+                .fetch();
+
+        for (Member member : fetch) {
+            System.out.println("member = " + member);
+        }
+
+    }
+
 }
