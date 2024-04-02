@@ -4,7 +4,9 @@ import com.querydsl.core.QueryResults;
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.PersistenceUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -270,6 +272,79 @@ public class QuerydslBasicTest {
         for (Member member : fetch) {
             System.out.println("member = " + member);
         }
+
+    }
+
+    @Test
+    @DisplayName("조인 대상 필터링")
+    void join_on_filtering() {
+        List<Tuple> fetch = queryFactory
+                .select(member, team)
+                .from(member)
+                .leftJoin(member.team, team)
+                .on(team.name.eq("teamA"))
+                .fetch();
+
+        for (Tuple tuple : fetch) {
+            System.out.println("tuple = " + tuple);
+        }
+
+    }
+
+    @Test
+    @DisplayName("연관관계 없는 엔티티 외부 조인")
+    void join_on_no_relation() {
+        em.persist(new Member("teamA"));
+        em.persist(new Member("teamB"));
+        em.persist(new Member("teamC"));
+
+        List<Tuple> fetch = queryFactory
+                .select(member, team)
+                .from(member)
+                .leftJoin(team)
+                .on(member.username.eq(team.name))
+                .fetch();
+
+        for (Tuple tuple : fetch) {
+            System.out.println("tuple = " + tuple);
+        }
+
+    }
+
+    @PersistenceUnit
+    EntityManagerFactory emf;
+
+    @Test
+    @DisplayName("페치조인 미적용 예제")
+    void fetchJoinNo() {
+        em.flush();
+        em.clear();
+
+        Member findMember = queryFactory
+                .selectFrom(member)
+                .where(member.username.eq("member1"))
+                .fetchOne();
+
+        boolean loaded = emf.getPersistenceUnitUtil().isLoaded(findMember.getTeam());
+
+        assertThat(loaded).as("페치 조인 미적용").isFalse();
+
+    }
+    @Test
+    @DisplayName("페치조인 적용 예제")
+    void fetchJoinNoUse() {
+        em.flush();
+        em.clear();
+
+        Member findMember = queryFactory
+                .selectFrom(member)
+                .join(member.team, team).fetchJoin()
+                .where(member.username.eq("member1"))
+                .fetchOne();
+
+        boolean loaded = emf.getPersistenceUnitUtil().isLoaded(findMember.getTeam());
+
+        assertThat(loaded).as("페치 조인 적용").isTrue();
 
     }
 
