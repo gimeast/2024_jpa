@@ -311,20 +311,6 @@ public class QuerydslBasicTest {
 
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     @PersistenceUnit
     EntityManagerFactory emf;
 
