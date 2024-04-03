@@ -493,5 +493,32 @@ public class QuerydslBasicTest {
             System.out.println("s = " + s);
         }
     }
+    
+    @Test
+    @DisplayName("프로젝션과 결과 반환 - 기본")
+    void simpleProjection() {
+        List<String> result = queryFactory
+                .select(member.username)
+                .from(member)
+                .fetch();
+        
+        assertThat(result).containsExactly("member1", "member2", "member3", "member4");
+    }
+    
+    @Test
+    @DisplayName("tuple 프로젝션")
+    void tupleProjection() {
+        List<Tuple> result = queryFactory
+                .select(member.username, member.age)
+                .from(member)
+                .fetch();
+
+        for (Tuple tuple : result) {
+            String username = tuple.get(member.username);
+            Integer age = tuple.get(member.age);
+            System.out.println("username = " + username);
+            System.out.println("age = " + age);
+        }
+    }
 
 }
