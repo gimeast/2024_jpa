@@ -688,8 +688,69 @@ public class QuerydslBasicTest {
         return usernameEq(usernameCond).and(ageEq(ageCond));
     }
 
+    @Test
+    @DisplayName("수정 벌크 연산")
+    void bulkUpdate() {
+        queryFactory
+                .update(member)
+                .set(member.username, "비회원")
+                .set(member.age, 3)
+                .where(member.age.gt(20))
+                .execute();
+        //벌크연산은 1차 캐시를 무시하고 바로 실행된다.
+        //em.flush(); 그러므로 flush를 할 필요가 없다.
+        em.clear(); //대신 1차 캐시를 지워야한다.
 
+        List<Member> result = queryFactory
+                .selectFrom(member)
+                .fetch();
 
+        for (Member member : result) {
+            System.out.println("member = " + member);
+        }
 
+    }
+
+    @Test
+    @DisplayName("덧셈 벌크 연산")
+    void bulkAdd() {
+        queryFactory
+                .update(member)
+                .set(member.age, member.age.add(1))
+                .execute();
+
+        //벌크연산은 1차 캐시를 무시하고 바로 실행된다.
+        //em.flush(); 그러므로 flush를 할 필요가 없다.
+        em.clear(); //대신 1차 캐시를 지워야한다.
+
+        List<Member> result = queryFactory
+                .selectFrom(member)
+                .fetch();
+
+        for (Member member : result) {
+            System.out.println("member = " + member);
+        }
+    }
+    
+    @Test
+    @DisplayName("삭제 벌크 연산")
+    void bulkDelete() {
+        queryFactory
+                .delete(member)
+                .where(member.age.goe(30))
+                .execute();
+
+        //벌크연산은 1차 캐시를 무시하고 바로 실행된다.
+        //em.flush(); 그러므로 flush를 할 필요가 없다.
+        em.clear(); //대신 1차 캐시를 지워야한다.
+
+        List<Member> result = queryFactory
+                .selectFrom(member)
+                .fetch();
+
+        for (Member member : result) {
+            System.out.println("member = " + member);
+        }
+    }
 
 }
