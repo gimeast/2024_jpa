@@ -753,4 +753,36 @@ public class QuerydslBasicTest {
         }
     }
 
+    @Test
+    @DisplayName("SQL function 호출하기")
+    void sqlFunction() {
+        List<String> m = queryFactory
+                .select(
+                        Expressions.stringTemplate(
+                                "function('replace', {0}, {1}, {2})",
+                                    member.username, "member", "M"
+                        )
+                )
+                .from(member)
+                .fetch();
+
+        for (String s : m) {
+            System.out.println("s = " + s);
+        }
+    }
+    @Test
+    @DisplayName("SQL function 호출하기2")
+    void sqlFunction2() {
+        List<String> m = queryFactory
+                .select(member.username)
+                .from(member)
+//                .where(member.username.eq(Expressions.stringTemplate("function('lower', {0})", member.username)))
+                .where(member.username.eq(member.username.lower()))
+                .fetch();
+
+        for (String s : m) {
+            System.out.println("s = " + s);
+        }
+    }
+
 }
