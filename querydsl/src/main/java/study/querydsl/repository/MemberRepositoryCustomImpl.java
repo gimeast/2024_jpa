@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.util.StringUtils;
 import study.querydsl.dto.MemberSearchCondition;
 import study.querydsl.dto.MemberTeamDto;
@@ -75,9 +76,13 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
     @Override
     public Page<MemberTeamDto> searchPageComplex(MemberSearchCondition condition, Pageable pageable) {
         List<MemberTeamDto> content = getMemberTeamDtos(condition, pageable);
-        int total = getTotal(condition);
-
-        return new PageImpl<>(content, pageable, total);
+//        return new PageImpl<>(content, pageable, getTotal(condition));
+        
+        //아래처럼 페이징을 하면 최적화가 된다. 
+        //첫페이지면서 total count가 페이지 사이즈 보다 작을때
+        //마지막 페이지면서 조회되는 데이터가 페이지 사이즈 보다 작을떄
+        //total count를 조회하지 않는다.
+        return PageableExecutionUtils.getPage(content, pageable, () -> getTotal(condition));
     }
 
     private List<MemberTeamDto> getMemberTeamDtos(MemberSearchCondition condition, Pageable pageable) {
