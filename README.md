@@ -8,3 +8,6 @@
 
 ## 실전! 스프링 데이터 JPA
 * [X] [data-jpa](https://github.com/gimeast/2024_jpa/tree/main/data-jpa)
+
+## 실전! Querydsl
+* [X] [querydsl](https://github.com/gimeast/2024_jpa/tree/main/querydsl)
